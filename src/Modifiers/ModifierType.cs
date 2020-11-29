@@ -16,6 +16,9 @@ namespace AudicaModding
         Particles,
         ZOffset,
         Wobble,
-        Shift
+        RandomOffset,
+        BetterMelees,
+        Scale,
+        HiddenTelegraphs
     }
 }

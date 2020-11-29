@@ -13,7 +13,7 @@ namespace AudicaModding
     {
         private static bool timerActive = false;
         public static bool stopAllModifiers = false;
-        public bool enableCountdown = true;
+        public static bool enableCountdown = true;
 
         public static Dictionary<ModifierType, float> lastModifierTime = new Dictionary<ModifierType, float>();
 
@@ -47,7 +47,18 @@ namespace AudicaModding
         {
             if (MenuState.sState == MenuState.State.Launched)
             {
-                if (AudioDriver.I is null) return false;
+                if(activeModifiers.Count >= Config.generalParams.maxActiveModifiers)
+                {
+                    MelonLogger.Log("Max active modifiers reached.");
+                    return false;
+                }
+
+                if (AudioDriver.I is null)
+                {
+                    MelonLogger.Log("Song hasn't started yet.");
+                    return false;
+                }
+                  
                 if (AudioDriver.I.IsPlaying())
                 {
                     float tick = AudioDriver.I.mCachedTick;
@@ -57,7 +68,12 @@ namespace AudicaModding
                         if (lastModifierTime.TryGetValue(modifier.type, out time))
                         {
                             if ((time + modifier.defaultParams.cooldown) <= AudioDriver.I.GetSongPositionSeconds(AudioDriver.TickContext.Audio)) return true;
-                            else return false;
+                            else
+                            {
+                                MelonLogger.Log("Modifier is on cooldown.");
+                                return false;
+                            }
+                               
 
                         }
                         else
@@ -73,35 +89,37 @@ namespace AudicaModding
             return false;
         }
 
-        private static IEnumerator Countdown(Modifier modifier, float countdownTimer = 6)
+        private static IEnumerator Countdown(Modifier modifier, float countdownTimer = 4)
         {
+            yield return new WaitForSecondsRealtime(.2f);
             if (Config.generalParams.countdownEnabled)
             {
                 timerActive = true;
-                yield return new WaitForSeconds(Config.generalParams.cooldownBetweenModifiers);
+                
                 string colortag = modifier.type == ModifierType.AA ? "<color=\"orange\">" : modifier.type == ModifierType.Psychadelia ? "<color=\"blue\">" : modifier.type == ModifierType.Mines ? "<color=\"red\">" : modifier.type == ModifierType.Speed ? "<color=\"green\">" : "";
                 while (countdownTimer > 0)
                 {
-
-                    if (countdownTimer == 6) DebugText(colortag + modifier.defaultParams.name + "\nrequested by: " + modifier.defaultParams.user, 0.09f);
-                    if (countdownTimer == 3) DebugText("3", 0.6f);
-                    if (countdownTimer == 2) DebugText("2", 0.6f);
-                    if (countdownTimer == 1) DebugText("1", 0.6f);
-                    if (stopAllModifiers) yield break;
-
-
-                    yield return new WaitForSeconds(1f);
-                    countdownTimer--;
+                    if (!InGameUI.I.pauseScreen.IsPaused())
+                    {
+                        if (countdownTimer == 4) DebugText(colortag + modifier.defaultParams.name + "\nrequested by: " + modifier.defaultParams.user, 0.2f);
+                        if (countdownTimer == 3) DebugText("3", 0.6f);
+                        if (countdownTimer == 2) DebugText("2", 0.6f);
+                        if (countdownTimer == 1) DebugText("1", 0.6f);
+                        if (stopAllModifiers) yield break;
 
 
+                        yield return new WaitForSecondsRealtime(1f);
+                        countdownTimer--;
+                    }
+                    yield return null;
                 }
             }
-           
+            
             timerActive = false;
             queuedModifiers.Remove(modifier);
             if (!stopAllModifiers) modifier.Activate();          
             ProcessQueue();
-            yield return null;
+            yield return new WaitForSeconds(Config.generalParams.cooldownBetweenModifiers);
         }
 
         public static void DebugText(string text, float speed)
@@ -115,16 +133,16 @@ namespace AudicaModding
             activeModifiers.Remove(mod);           
         }
 
-        public static IEnumerator Reset() //was IEnumerator
-        {
+        public static IEnumerator Reset()
+        {              
             stopAllModifiers = true;
-            yield return new WaitForSeconds(1.5f);
-           
-            for (int i = activeModifiers.Count - 1;i > -1; i--) activeModifiers[i].Deactivate();
+            yield return new WaitForSecondsRealtime(1.5f);
+            for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();
+            StatusTextManager.DestroyAllPopups();
             lastModifierTime.Clear();
             timerActive = false;
             queuedModifiers.Clear();
-            stopAllModifiers = false;
+            stopAllModifiers = false;          
         }      
     }
 }

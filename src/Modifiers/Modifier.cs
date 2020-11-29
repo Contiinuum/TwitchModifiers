@@ -20,25 +20,25 @@ namespace AudicaModding
         {
             MelonLogger.Log(type.ToString() + " activated");
             defaultParams.active = true;
+            StatusTextManager.RequestPopup(type, type.ToString() + ": " + defaultParams.duration.ToString());
         }
 
         public virtual void Deactivate()
         {
             MelonLogger.Log(type.ToString() + " deactivated");
             defaultParams.active = false;
+            StatusTextManager.DestroyPopup(type);
             ModifierManager.UnregisterModifier(this);
         }
 
         protected IEnumerator Timer(float countdownTimer)
         {
-            float now = Time.realtimeSinceStartup;
-            float want = Time.realtimeSinceStartup + countdownTimer;
-            while(now < want)
-            {
+            while(countdownTimer > 0)
+            {              
                 if (ModifierManager.stopAllModifiers) yield break;
-                now = Time.realtimeSinceStartup;
-                Thread.Sleep(16);
-                yield return null;
+                StatusTextManager.UpdatePopup(type, type.ToString() + ": " + countdownTimer.ToString());
+                if(!InGameUI.I.pauseScreen.IsPaused()) countdownTimer--;
+                yield return new WaitForSecondsRealtime(1f);
             }
             Deactivate();
             yield return null;

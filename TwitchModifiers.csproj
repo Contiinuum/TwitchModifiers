@@ -184,6 +184,7 @@
     <Compile Include="src\Config.cs" />
     <Compile Include="src\Modifiers\AimAssistChange.cs" />
     <Compile Include="src\CommandManager.cs" />
+    <Compile Include="src\Modifiers\BetterMelees.cs" />
     <Compile Include="src\Modifiers\ModifierType.cs" />
     <Compile Include="src\Modifiers\RandomColors.cs" />
     <Compile Include="src\Modifiers\InvisibleGuns.cs" />
@@ -192,11 +193,13 @@
     <Compile Include="src\Modifiers\Particles.cs" />
     <Compile Include="src\Modifiers\Psychadelia.cs" />
     <Compile Include="src\ModifierManager.cs" />
-    <Compile Include="src\Modifiers\Shift.cs" />
+    <Compile Include="src\Modifiers\RandomOffset.cs" />
+    <Compile Include="src\Modifiers\Scale.cs" />
     <Compile Include="src\Modifiers\SpeedChange.cs" />
     <Compile Include="src\Hooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Modifiers\Modifier.cs" />
+    <Compile Include="src\StatusTextManager.cs" />
     <Compile Include="src\TwitchHandler.cs" />
     <Compile Include="src\Modifiers\Wobble.cs" />
     <Compile Include="src\Modifiers\ZOffset.cs" />

@@ -76,8 +76,9 @@ namespace AudicaModding
                     }
                 }
                 progress++;
-                Thread.Sleep(16);
-                yield return null;
+                yield return new WaitForSecondsRealtime(.002f);
+                //Thread.Sleep(16);
+                //yield return null;
             }
             
         }

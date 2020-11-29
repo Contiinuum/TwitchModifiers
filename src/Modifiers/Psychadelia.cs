@@ -28,10 +28,12 @@ namespace AudicaModding
 
         public override void Activate()
         {
+           
             base.Activate();
-            MelonCoroutines.Start(Timer(defaultParams.duration));
             if (amount > psychadeliaParams.maxPsychadeliaSpeed) amount = psychadeliaParams.maxPsychadeliaSpeed;
-            else if (amount < psychadeliaParams.minPsychadeliaSpeed) amount = psychadeliaParams.minPsychadeliaSpeed;      
+            else if (amount < psychadeliaParams.minPsychadeliaSpeed) amount = psychadeliaParams.minPsychadeliaSpeed;
+            MelonCoroutines.Start(Timer(defaultParams.duration));
+
             MelonCoroutines.Start(DoPsychedelia());
         }
 
@@ -40,7 +42,6 @@ namespace AudicaModding
             base.Deactivate();
             GameplayModifiers.I.mPsychedeliaPhase = 0.000001f;     
         }
-
         private IEnumerator DoPsychedelia()
         {
             while (defaultParams.active)
@@ -58,8 +59,7 @@ namespace AudicaModding
                 {
                     psychadeliaTimer = 0;
                 }
-                Thread.Sleep(16);
-                yield return null;
+                yield return new WaitForSecondsRealtime(.01f);
             }           
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace AudicaModding
 {
@@ -31,12 +32,16 @@ namespace AudicaModding
             public bool enableTwitchModifiers;
             public bool countdownEnabled;
             public float cooldownBetweenModifiers;
+            public int maxActiveModifiers;
+            public bool showModStatus;
 
-            public General(bool _countdownEnabled, float _cooldownBetweenModifiers, bool _enableTwitchModifiers)
+            public General(bool _countdownEnabled, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
             {
                 enableTwitchModifiers = _enableTwitchModifiers;
                 countdownEnabled = _countdownEnabled;
                 cooldownBetweenModifiers = _cooldownBetweenModifiers;
+                maxActiveModifiers = _maxActiveModifiers;
+                showModStatus = _showModStatus;
             }
         }
 
@@ -155,21 +160,17 @@ namespace AudicaModding
             }
         }
 
-        public struct Shift
+        public struct BetterMelees
         {
             public bool enabled;
             public float duration;
             public float cooldown;
-            public float minShift;
-            public float maxShift;
 
-            public Shift(bool _enabled, float _duration, float _cooldown, float _minShift, float _maxShift)
+            public BetterMelees(bool _enabled, float _duration, float _cooldown)
             {
                 enabled = _enabled;
                 duration = _duration;
                 cooldown = _cooldown;
-                minShift = _minShift;
-                maxShift = _maxShift;
             }
         }
         public struct Wobble
@@ -196,6 +197,46 @@ namespace AudicaModding
                 duration = _duration;
                 cooldown = _cooldown;
                 enabled = _enabled;
+            }
+        }
+
+        public struct RandomOffset
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+            public float minOffsetX;
+            public float maxOffsetX;
+            public float minOffsetY;
+            public float maxOffsetY;
+
+            public RandomOffset(bool _enabled, float _duration, float _cooldown, float _minoffsetX, float _maxOffsetX, float _minOffsetY, float _maxOffsetY)
+            {
+                enabled = _enabled;
+                duration = _duration;
+                cooldown = _cooldown;
+                minOffsetX = _minoffsetX;
+                maxOffsetX = _maxOffsetX;
+                minOffsetY = _minOffsetY;
+                maxOffsetY = _maxOffsetY;
+            }
+        }
+
+        public struct Scale
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+            public float minScale;
+            public float maxScale;
+
+            public Scale(bool _enabled, float _duration, float _cooldown, float _minScale, float _maxScale)
+            {
+                enabled = _enabled;
+                duration = _duration;
+                cooldown = _cooldown;
+                minScale = _minScale;
+                maxScale = _maxScale;
             }
         }
     }

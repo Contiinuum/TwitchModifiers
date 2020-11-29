@@ -113,7 +113,7 @@ namespace AudicaModding
                 string command = msg.Replace("!", "").Split(" ".ToCharArray())[0];
                 string arguments = msg.Replace("!" + command + " ", "");
                 float amount = ParseAmount(arguments) / 100;
-                if (amount < 0 && (command != "zoffset" || command != "shift")) return;
+                if (amount < 0 && command != "zoffset") return;
                 if (command == "speed")
                 {
                     CommandManager.RegisterModifier(ModifierType.Speed, amount, user);
@@ -149,6 +149,22 @@ namespace AudicaModding
                 else if (command == "zoffset")
                 {
                     CommandManager.RegisterModifier(ModifierType.ZOffset, amount, user);
+                }
+                else if(command == "randomoffset")
+                {
+                    CommandManager.RegisterModifier(ModifierType.RandomOffset, user);
+                }
+                else if(command == "bettermelees")
+                {
+                    CommandManager.RegisterModifier(ModifierType.BetterMelees, user);
+                }
+                else if(command == "scale")
+                {
+                    CommandManager.RegisterModifier(ModifierType.Scale, amount, user);
+                }
+                else if(command == "hiddentele")
+                {
+                    //CommandManager.RegisterModifier(ModifierType.HiddenTelegraphs, user);
                 }
             }
         }

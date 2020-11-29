@@ -84,6 +84,15 @@ namespace AudicaModding
                 case ModifierType.ZOffset:
                     if (Config.zOffsetParams.enabled) mod = new ZOffset(type, new ModifierParams.Default("zOffset", user), Config.zOffsetParams, amount);
                     break;
+                case ModifierType.BetterMelees:
+                    if (Config.betterMeleesParams.enabled) mod = new BetterMelees(type, new ModifierParams.Default("Better Melees", user), Config.betterMeleesParams);
+                    break;
+                case ModifierType.RandomOffset:
+                    if (Config.randomOffsetParams.enabled) mod = new RandomOffset(type, new ModifierParams.Default("Random Offset", user), Config.randomOffsetParams);
+                    break;
+                case ModifierType.Scale:
+                    if (Config.scaleParams.enabled) mod = new Scale(type, new ModifierParams.Default("Scale", user), Config.scaleParams, amount);
+                    break;
                 default:
                     return;
             }
@@ -94,14 +103,24 @@ namespace AudicaModding
 
         public override void OnUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.A)) TwitchHandler.ParseCommand("!speed 120", "continuum");
-            if (Input.GetKeyDown(KeyCode.S)) TwitchHandler.ParseCommand("!aa 0", "continuum");
-            if (Input.GetKeyDown(KeyCode.D)) TwitchHandler.ParseCommand("!psy 200", "continuum");
-            if (Input.GetKeyDown(KeyCode.F)) TwitchHandler.ParseCommand("!mines", "continuum");
-            if (Input.GetKeyDown(KeyCode.G)) TwitchHandler.ParseCommand("!invisguns", "continuum");
-            if (Input.GetKeyDown(KeyCode.H)) TwitchHandler.ParseCommand("!wobble", "continuum");
-            if (Input.GetKeyDown(KeyCode.J)) TwitchHandler.ParseCommand("!particles 100", "continuum");
-            if (Input.GetKeyDown(KeyCode.K)) TwitchHandler.ParseCommand("!zoffset -50", "continuum");           
+            /*
+            if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
+            if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
+            if (Input.GetKeyDown(KeyCode.D)) DebugCommand("!psy 200");
+            if (Input.GetKeyDown(KeyCode.F)) DebugCommand("!mines");
+            if (Input.GetKeyDown(KeyCode.G)) DebugCommand("!invisguns");
+            if (Input.GetKeyDown(KeyCode.H)) DebugCommand("!wobble 150");
+            if (Input.GetKeyDown(KeyCode.J)) DebugCommand("!particles 150");
+            if (Input.GetKeyDown(KeyCode.K)) DebugCommand("!zoffset 150");
+            if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!bettermelees");
+            if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!randomoffset");
+            if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!scale 150");
+            */
         }      
+
+        private void DebugCommand(string command)
+        {
+            TwitchHandler.ParseCommand(command, "conti");
+        }
     }
 }

@@ -44,34 +44,37 @@ namespace AudicaModding
 
             while (defaultParams.active)
             {
-                float tickStart = AudioDriver.I.mCachedTick;
-                int startVal = ((int)Math.Round((tickStart / (double)factor), MidpointRounding.AwayFromZero) * factor) + 960; //nearest half measure ahead of current time
-
-                float percentage = UnityEngine.Random.Range(0f, 1f);
-                if (percentage < .25f)
+                if (!InGameUI.I.pauseScreen.IsPaused())
                 {
-                    SpawnMine(startVal);
+                    float tickStart = AudioDriver.I.mCachedTick;
+                    int startVal = ((int)Math.Round((tickStart / (double)factor), MidpointRounding.AwayFromZero) * factor) + 960; //nearest half measure ahead of current time
 
-                }
-                else if (percentage < .5f)
-                {
-                    SpawnMine(startVal + step);
-                }
-                else if (percentage < .75f)
-                {
-                    SpawnMine(startVal + step * 2);
-                }
+                    float percentage = UnityEngine.Random.Range(0f, 1f);
+                    if (percentage < .25f)
+                    {
+                        SpawnMine(startVal);
 
-                yield return new WaitForSeconds(1f);
+                    }
+                    else if (percentage < .5f)
+                    {
+                        SpawnMine(startVal + step);
+                    }
+                    else if (percentage < .75f)
+                    {
+                        SpawnMine(startVal + step * 2);
+                    }
+                }
+                yield return new WaitForSecondsRealtime(1f);
             }
         }
 
         private void SpawnMine(float tickStart)
         {
+            if (tickStart > SongCues.I.GetLastCueStartTick()) return;
             float x = UnityEngine.Random.Range(minOffset.x, maxOffset.x);
             float y = UnityEngine.Random.Range(minOffset.y, maxOffset.y);
             Vector2 offset = new Vector2(x, y);
-            SongCues.Cue cue = new SongCues.Cue((int)tickStart, 480, 100, 4, Target.TargetHandType.None, Target.TargetBehavior.Dodge, offset);
+            SongCues.Cue cue = new SongCues.Cue((int)tickStart, 120, 100, 3, Target.TargetHandType.None, Target.TargetBehavior.Dodge, offset);
             spawner.SpawnCue(cue);
         }
     }

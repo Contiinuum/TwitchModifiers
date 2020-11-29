@@ -42,8 +42,10 @@ namespace AudicaModding
         {
             private static void Prefix(InGameUI __instance)
             {
-                MelonCoroutines.Start(ModifierManager.Reset());                                
+                MelonCoroutines.Start(ModifierManager.Reset());
             }
+           
         }      
+        
     }
 }

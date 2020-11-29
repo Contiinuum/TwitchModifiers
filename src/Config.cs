@@ -11,6 +11,8 @@ namespace AudicaModding
         private static bool enableTwitchModifiers;
         private static bool enableCountdown;
         private static float cooldownBetweenModifiers;
+        private static int maxActiveModifiers;
+        private static bool showModStatus;
 
         public static ModifierParams.Speed speedParams;
         private static string speedTilte = "[Header]Speed Change";
@@ -69,12 +71,38 @@ namespace AudicaModding
         private static float minZoffset;
         private static float maxZoffset;
 
+        public static ModifierParams.BetterMelees betterMeleesParams;
+        private static string betterMeleesTitle = "[Header]Better Melees";
+        private static bool betterMeleesEnabled;
+        private static float betterMeleesDuration;
+        private static float betterMeleesCooldown;
+
+        public static ModifierParams.RandomOffset randomOffsetParams;
+        private static string randomoffsetTitle = "[Header]Random Offset";
+        private static bool randomOffsetEnabled;
+        private static float randomOffsetDuration;
+        private static float randomOffsetCooldown;
+        private static float minRandomOffsetX;
+        private static float maxRandomOffsetX;
+        private static float minRandomOffsetY;
+        private static float maxRandomOffsetY;
+
+        public static ModifierParams.Scale scaleParams;
+        private static string scaleTitle = "[Header]Scale";
+        private static bool scaleEnabled;
+        private static float scaleDuration;
+        private static float scaleCooldown;
+        private static float minScale;
+        private static float maxScale;
+
 
         public static void RegisterConfig()
         {
             MelonPrefs.RegisterBool(Category, nameof(enableTwitchModifiers), true, "Enables Twitch Modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(enableCountdown), true, "Enables Countdown before activating a modifier.");
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
+            MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
+            MelonPrefs.RegisterBool(Category, nameof(showModStatus), true, "Shows time left for on active modifier ingame.");
 
             MelonPrefs.RegisterString(Category, nameof(speedTilte), "", speedTilte);
             MelonPrefs.RegisterBool(Category, nameof(speedEnabled), true, "Enables this modifier.");
@@ -125,6 +153,27 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(minZoffset), -.5f, "Minimum amount of zOffset [-0.5, 0, 0.1, -0.5]");
             MelonPrefs.RegisterFloat(Category, nameof(maxZoffset), 3f, "Maximum amount of zOffset [0, 5, 0.1, 3]");
 
+            MelonPrefs.RegisterString(Category, nameof(betterMeleesTitle), "", betterMeleesTitle);
+            MelonPrefs.RegisterBool(Category, nameof(betterMeleesEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(betterMeleesDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(betterMeleesCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
+            MelonPrefs.RegisterString(Category, nameof(randomoffsetTitle), "", randomoffsetTitle);
+            MelonPrefs.RegisterBool(Category, nameof(randomOffsetEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(randomOffsetDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(randomOffsetCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(minRandomOffsetX), -1.5f, "Minimum offset on X-Axis.[-2.5, 0, 0.1, -1.5]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(maxRandomOffsetX), 1.5f, "Maximum offset on X-Axis.[0, 2.5, 0.1, 1.5]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(minRandomOffsetY), -1.5f, "Minimum offset on Y-Axis.[-2.5, 0, 0.1, -1.5]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(maxRandomOffsetY), 1.5f, "Maximum offset on Y-Axis.[0, 2.5, 0.1, 1.5]{P}");
+
+            MelonPrefs.RegisterString(Category, nameof(scaleTitle), "", scaleTitle);
+            MelonPrefs.RegisterBool(Category, nameof(scaleEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(scaleDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(scaleCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(minScale), .5f, "Minimum scale.[0.1, 1, 0.1, 0.5]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(maxScale), 3f, "Maximum scale.[1, 3, 0.1, 3]{P}");
+
             OnModSettingsApplied();
         }
 
@@ -135,14 +184,15 @@ namespace AudicaModding
                 if (fieldInfo.FieldType == typeof(string)) fieldInfo.SetValue(null, MelonPrefs.GetString(Category, fieldInfo.Name));
                 else if (fieldInfo.FieldType == typeof(bool)) fieldInfo.SetValue(null, MelonPrefs.GetBool(Category, fieldInfo.Name));
                 else if (fieldInfo.FieldType == typeof(float)) fieldInfo.SetValue(null, MelonPrefs.GetFloat(Category, fieldInfo.Name));
+                else if (fieldInfo.FieldType == typeof(int)) fieldInfo.SetValue(null, MelonPrefs.GetInt(Category, fieldInfo.Name));
             }
-
+            MelonLogger.Log("Mod settings applied");
             AssignValues();
         }
 
         private static void AssignValues()
         {
-            generalParams = new ModifierParams.General(enableCountdown, cooldownBetweenModifiers, enableTwitchModifiers);
+            generalParams = new ModifierParams.General(enableCountdown, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
             speedParams = new ModifierParams.Speed(speedEnabled, speedDuration, speedCooldown, minSpeed, maxSpeed);
             aimParams = new ModifierParams.AimAssist(aimAssistEnabled, aimAssistDuration, aimAssistCooldown, minAimAssist);
             psychadeliaParams = new ModifierParams.Psychedelia(psychedeliaEnabled, psychedeliaDuration, psychedeliaCooldown, minPsychedeliaSpeed, maxPsychedeliaSpeed);
@@ -151,6 +201,9 @@ namespace AudicaModding
             invisGunsParams = new ModifierParams.InvisGuns(invisibleGunsEnabled, invisibleGunsDuration, invisibleGunsCooldown);
             particlesParams = new ModifierParams.Particles(particlesEnabled, particlesDuration, particlesCooldown, minParticles, maxParticles);
             zOffsetParams = new ModifierParams.ZOffset(zoffsetEnabled, zoffsetDuration, zoffsetCooldown, minZoffset, maxZoffset);
+            betterMeleesParams = new ModifierParams.BetterMelees(betterMeleesEnabled, betterMeleesDuration, betterMeleesCooldown);
+            randomOffsetParams = new ModifierParams.RandomOffset(randomOffsetEnabled, randomOffsetDuration, randomOffsetCooldown, minRandomOffsetX, maxRandomOffsetX, minRandomOffsetY, maxRandomOffsetY);
+            scaleParams = new ModifierParams.Scale(scaleEnabled, scaleDuration, scaleCooldown, minScale, maxScale);
         }
     }
 }
