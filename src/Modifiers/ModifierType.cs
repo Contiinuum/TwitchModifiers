@@ -19,6 +19,7 @@ namespace AudicaModding
         RandomOffset,
         BetterMelees,
         Scale,
-        HiddenTelegraphs
+        RandomColors,
+        ColorSwap
     }
 }

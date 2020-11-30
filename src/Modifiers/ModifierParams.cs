@@ -188,15 +188,28 @@ namespace AudicaModding
         }
         public struct RandomColors
         {
+            public bool enabled;
             public float duration;
             public float cooldown;
-            public bool enabled;
-
-            public RandomColors(float _duration, float _cooldown, bool _enabled)
+            public RandomColors(bool _enabled, float _duration, float _cooldown)
             {
+                enabled = _enabled;
                 duration = _duration;
                 cooldown = _cooldown;
+                
+            }
+        }
+        public struct ColorSwap
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+            public ColorSwap(bool _enabled, float _duration, float _cooldown)
+            {
                 enabled = _enabled;
+                duration = _duration;
+                cooldown = _cooldown;
+
             }
         }
 

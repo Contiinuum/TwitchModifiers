@@ -93,6 +93,12 @@ namespace AudicaModding
                 case ModifierType.Scale:
                     if (Config.scaleParams.enabled) mod = new Scale(type, new ModifierParams.Default("Scale", user), Config.scaleParams, amount);
                     break;
+                case ModifierType.RandomColors:
+                    if (Config.randomColorParams.enabled) mod = new RandomColors(type, new ModifierParams.Default("Random Colors", user), Config.randomColorParams);
+                    break;
+                case ModifierType.ColorSwap:
+                    if (Config.colorSwapParams.enabled) mod = new ColorSwap(type, new ModifierParams.Default("Color Swap", user), Config.colorSwapParams);
+                    break;
                 default:
                     return;
             }
@@ -103,6 +109,7 @@ namespace AudicaModding
 
         public override void OnUpdate()
         {
+
             /*
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
@@ -115,8 +122,9 @@ namespace AudicaModding
             if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!bettermelees");
             if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!randomoffset");
             if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!scale 150");
+            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
             */
-        }      
+        }
 
         private void DebugCommand(string command)
         {

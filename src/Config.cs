@@ -95,6 +95,18 @@ namespace AudicaModding
         private static float minScale;
         private static float maxScale;
 
+        public static ModifierParams.RandomColors randomColorParams;
+        private static string randomColorsTitle = "[Header]Random Colors";
+        private static bool randomColorsEnabled;
+        private static float randomColorsDuration;
+        private static float randomColorsCooldown;
+
+        public static ModifierParams.ColorSwap colorSwapParams;
+        private static string colorSwapTitle = "[Header]Color Swap";
+        private static bool colorSwapEnabled;
+        private static float colorSwapDuration;
+        private static float colorSwapCooldown;
+
 
         public static void RegisterConfig()
         {
@@ -174,6 +186,16 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(minScale), .5f, "Minimum scale.[0.1, 1, 0.1, 0.5]{P}");
             MelonPrefs.RegisterFloat(Category, nameof(maxScale), 3f, "Maximum scale.[1, 3, 0.1, 3]{P}");
 
+            MelonPrefs.RegisterString(Category, nameof(randomColorsTitle), "", randomColorsTitle);
+            MelonPrefs.RegisterBool(Category, nameof(randomColorsEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(randomColorsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(randomColorsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
+            MelonPrefs.RegisterString(Category, nameof(colorSwapTitle), "", colorSwapTitle);
+            MelonPrefs.RegisterBool(Category, nameof(colorSwapEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(colorSwapDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(colorSwapCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
             OnModSettingsApplied();
         }
 
@@ -204,6 +226,8 @@ namespace AudicaModding
             betterMeleesParams = new ModifierParams.BetterMelees(betterMeleesEnabled, betterMeleesDuration, betterMeleesCooldown);
             randomOffsetParams = new ModifierParams.RandomOffset(randomOffsetEnabled, randomOffsetDuration, randomOffsetCooldown, minRandomOffsetX, maxRandomOffsetX, minRandomOffsetY, maxRandomOffsetY);
             scaleParams = new ModifierParams.Scale(scaleEnabled, scaleDuration, scaleCooldown, minScale, maxScale);
+            randomColorParams = new ModifierParams.RandomColors(randomColorsEnabled, randomColorsDuration, randomColorsCooldown);
+            colorSwapParams = new ModifierParams.ColorSwap(colorSwapEnabled, colorSwapDuration, colorSwapCooldown);
         }
     }
 }

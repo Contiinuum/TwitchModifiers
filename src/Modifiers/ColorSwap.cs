@@ -8,53 +8,40 @@ using MelonLoader;
 
 namespace AudicaModding
 {
-    public class RandomColors : Modifier
+    public class ColorSwap : Modifier
     {
-        public ModifierParams.RandomColors randomColorParams;
-        private Color leftHandColor;
-        private Color rightHandColor;
-
-        private Color oldLeftHandColor;
-        private Color oldRightHandColor;
-        public RandomColors(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.RandomColors _randomColorParams)
+        public ModifierParams.ColorSwap colorSwitchParams;
+        public ColorSwap(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.ColorSwap _colorSwitchParams)
         {
             type = _type;
             defaultParams = _modifierParams;
-            randomColorParams = _randomColorParams;
-            defaultParams.duration = _randomColorParams.duration;
-            defaultParams.cooldown = _randomColorParams.cooldown;
+            colorSwitchParams = _colorSwitchParams;
+            defaultParams.duration = _colorSwitchParams.duration;
+            defaultParams.cooldown = _colorSwitchParams.cooldown;
         }
 
         public override void Activate()
         {
             base.Activate();
             MelonCoroutines.Start(Timer(defaultParams.duration));
-            ChangeColors(true);
+            SwapColors();
         }
 
         public override void Deactivate()
         {
             base.Deactivate();
-            ChangeColors(false);
+            SwapColors();
 
         }
 
-        public void ChangeColors(bool enable)
+        public void SwapColors()
         {
-            if (enable)
-            {
-                oldLeftHandColor = KataConfig.I.leftHandColor;
-                oldRightHandColor = KataConfig.I.rightHandColor;
 
-                leftHandColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), 1f);
-                rightHandColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), 1f);
-            }
-            else
-            {
-                leftHandColor = oldLeftHandColor;
-                rightHandColor = oldRightHandColor;
-            }
+
+            Color leftHandColor = KataConfig.I.rightHandColor;
+            Color rightHandColor = KataConfig.I.leftHandColor;
             
+
 
             PlayerPreferences.I.GunColorLeft.Set(leftHandColor);
             PlayerPreferences.I.GunColorRight.Set(rightHandColor);
@@ -82,7 +69,7 @@ namespace AudicaModding
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdatePreviewBeamColors(leftHandColor, rightHandColor);
-            CueDartManager.I.SetUpColors();          
+            CueDartManager.I.SetUpColors();
         }
     }
 }

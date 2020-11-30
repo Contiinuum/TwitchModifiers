@@ -162,9 +162,13 @@ namespace AudicaModding
                 {
                     CommandManager.RegisterModifier(ModifierType.Scale, amount, user);
                 }
-                else if(command == "hiddentele")
+                else if(command == "randomcolors")
                 {
-                    //CommandManager.RegisterModifier(ModifierType.HiddenTelegraphs, user);
+                    CommandManager.RegisterModifier(ModifierType.RandomColors, user);
+                }
+                else if(command == "colorswap")
+                {
+                    CommandManager.RegisterModifier(ModifierType.ColorSwap, user);
                 }
             }
         }
