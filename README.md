@@ -15,6 +15,8 @@
  !invisguns |  | Turns guns invisible
  !bettermelees |  | Turns melees into.. better melees.
  !randomoffset |  | Applies a random offset to all targets
+ !randomcolors |  | Picks random colors
+ !colorswap |  | Swaps the player's colors around
  
  **Example usage:** !speed 120
  
