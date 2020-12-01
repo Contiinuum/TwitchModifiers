@@ -26,9 +26,12 @@ namespace AudicaModding
         public override void Activate()
         {
             base.Activate();
+            //if (!PlayerPreferences.I.NoFail.mVal) MelonCoroutines.Start(ResetNoFail());
+            ModifierManager.invalidateScore = true;
             MelonCoroutines.Start(Timer(defaultParams.duration));
             MeleesToMines(true);
         }
+        
 
         public override void Deactivate()
         {
@@ -46,6 +49,7 @@ namespace AudicaModding
                 {
                     if (enable)
                     {
+                        if (oldBehavior.ContainsKey(cues[i].tick + cues[i].pitch)) continue;
                         oldBehavior.Add(cues[i].tick + cues[i].pitch, new BehaviorType(cues[i].behavior, cues[i].handType));
                         cues[i].behavior = Target.TargetBehavior.Dodge;
                         cues[i].handType = Target.TargetHandType.None;

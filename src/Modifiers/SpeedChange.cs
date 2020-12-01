@@ -30,6 +30,7 @@ namespace AudicaModding
             base.Activate();
             if (amount > speedParams.maxSpeed) amount = speedParams.maxSpeed;
             else if (amount < speedParams.minSpeed) amount = speedParams.minSpeed;
+            if (amount < 1f) ModifierManager.invalidateScore = true;
             tempoRampActive = true;
             MelonCoroutines.Start(TempoRamp());
         }
@@ -48,6 +49,7 @@ namespace AudicaModding
                 if (ModifierManager.stopAllModifiers)
                 {
                     AudioDriver.I.SetSpeed(1f);
+                    if (amount >= 1f) ScoreKeeper.I.GetScoreValidity();
                     tempoRampActive = false;
                     base.Deactivate();
                     yield break;
@@ -75,10 +77,9 @@ namespace AudicaModding
                         yield break;
                     }
                 }
+                if (amount >= 1f) ScoreKeeper.I.GetScoreValidity();
                 progress++;
                 yield return new WaitForSecondsRealtime(.002f);
-                //Thread.Sleep(16);
-                //yield return null;
             }
             
         }

@@ -28,6 +28,7 @@ namespace AudicaModding
         public override void Activate()
         {
             base.Activate();
+            //if (!PlayerPreferences.I.NoFail.mVal) MelonCoroutines.Start(ResetNoFail());
             MelonCoroutines.Start(Timer(defaultParams.duration));
             MelonCoroutines.Start(SpawnMines());
         }

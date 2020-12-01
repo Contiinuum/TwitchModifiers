@@ -44,5 +44,13 @@ namespace AudicaModding
             yield return null;
         }
 
+        protected IEnumerator ResetNoFail()
+        {
+            PlayerPreferences.I.NoFail.mVal = true;
+            yield return new WaitForSecondsRealtime(.2f);
+            PlayerPreferences.I.NoFail.mVal = false;
+            yield return null;
+        }
+
     }
 }

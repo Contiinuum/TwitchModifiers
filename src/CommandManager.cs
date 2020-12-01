@@ -108,8 +108,7 @@ namespace AudicaModding
         }
 
         public override void OnUpdate()
-        {
-
+        {           
             /*
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");

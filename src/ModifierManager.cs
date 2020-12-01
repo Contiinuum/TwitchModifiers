@@ -15,6 +15,8 @@ namespace AudicaModding
         public static bool stopAllModifiers = false;
         public static bool enableCountdown = true;
 
+        public static bool invalidateScore = false;
+
         public static Dictionary<ModifierType, float> lastModifierTime = new Dictionary<ModifierType, float>();
 
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
@@ -142,7 +144,8 @@ namespace AudicaModding
             lastModifierTime.Clear();
             timerActive = false;
             queuedModifiers.Clear();
-            stopAllModifiers = false;          
+            stopAllModifiers = false;
+            invalidateScore = false;
         }      
     }
 }

@@ -11,6 +11,10 @@ namespace AudicaModding
     public class ColorSwap : Modifier
     {
         public ModifierParams.ColorSwap colorSwitchParams;
+
+        private Color leftHandColor;
+        private Color rightHandColor;
+
         public ColorSwap(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.ColorSwap _colorSwitchParams)
         {
             type = _type;
@@ -24,28 +28,29 @@ namespace AudicaModding
         {
             base.Activate();
             MelonCoroutines.Start(Timer(defaultParams.duration));
-            SwapColors();
+            SwapColors(true);
         }
 
         public override void Deactivate()
         {
             base.Deactivate();
-            SwapColors();
+            SwapColors(false);
 
         }
 
-        public void SwapColors()
+        public void SwapColors(bool enable)
         {
 
+            leftHandColor = KataConfig.I.rightHandColor;
+            rightHandColor = KataConfig.I.leftHandColor;
+            
 
-            Color leftHandColor = KataConfig.I.rightHandColor;
-            Color rightHandColor = KataConfig.I.leftHandColor;
+           
             
 
 
             PlayerPreferences.I.GunColorLeft.Set(leftHandColor);
             PlayerPreferences.I.GunColorRight.Set(rightHandColor);
-            Gun[] guns = GameObject.FindObjectsOfType<Gun>();
             KataConfig.I.leftHandColor = leftHandColor;
             KataConfig.I.rightHandColor = rightHandColor;
             for (int i = 0; i < PlayerPreferences.I.mColorPrefs.Count; i++)
@@ -59,17 +64,29 @@ namespace AudicaModding
                     PlayerPreferences.I.mColorPrefs[i].mVal = rightHandColor;
                 }
             }
-            for (int i = 0; i < guns.Length; i++)
+
+            Target[] targets = GameObject.FindObjectsOfType<Target>();
+            for (int i = 0; i < targets.Length; i++)
             {
-                guns[i].UpdateGunModel();
-                guns[i].UpdateColor(leftHandColor, rightHandColor);
-                guns[i].UpdateBeamTextures();
+                if (targets[i].mCue.behavior != Target.TargetBehavior.Chain) continue;
+                if (targets[i].mCue.handType == Target.TargetHandType.Left)
+                {
+                    targets[i].chainLine.startColor = leftHandColor;
+                    targets[i].chainLine.endColor = leftHandColor;
+                }
+                else
+                {
+                    targets[i].chainLine.startColor = rightHandColor;
+                    targets[i].chainLine.endColor = rightHandColor;
+                }
+
             }
+            
             TargetColorSetter.I.updateColors = true;
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdatePreviewBeamColors(leftHandColor, rightHandColor);
-            CueDartManager.I.SetUpColors();
+            if(MenuState.sState == MenuState.State.Launched) CueDartManager.I.SetUpColors();
         }
     }
 }

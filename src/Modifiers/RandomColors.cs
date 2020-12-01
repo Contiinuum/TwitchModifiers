@@ -58,7 +58,6 @@ namespace AudicaModding
 
             PlayerPreferences.I.GunColorLeft.Set(leftHandColor);
             PlayerPreferences.I.GunColorRight.Set(rightHandColor);
-            Gun[] guns = GameObject.FindObjectsOfType<Gun>();
             KataConfig.I.leftHandColor = leftHandColor;
             KataConfig.I.rightHandColor = rightHandColor;
             for (int i = 0; i < PlayerPreferences.I.mColorPrefs.Count; i++)
@@ -72,17 +71,29 @@ namespace AudicaModding
                     PlayerPreferences.I.mColorPrefs[i].mVal = rightHandColor;
                 }
             }
-            for (int i = 0; i < guns.Length; i++)
+
+            Target[] targets = GameObject.FindObjectsOfType<Target>();
+            for(int i = 0; i < targets.Length; i++)
             {
-                guns[i].UpdateGunModel();
-                guns[i].UpdateColor(leftHandColor, rightHandColor);
-                guns[i].UpdateBeamTextures();
+                if (targets[i].mCue.behavior != Target.TargetBehavior.Chain) continue;
+                if(targets[i].mCue.handType == Target.TargetHandType.Left)
+                {
+                    targets[i].chainLine.startColor = leftHandColor;
+                    targets[i].chainLine.endColor = leftHandColor;
+                }
+                else
+                {
+                    targets[i].chainLine.startColor = rightHandColor;
+                    targets[i].chainLine.endColor = rightHandColor;
+                }
+                
             }
+
             TargetColorSetter.I.updateColors = true;
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdatePreviewBeamColors(leftHandColor, rightHandColor);
-            CueDartManager.I.SetUpColors();          
+            if (MenuState.sState == MenuState.State.Launched) CueDartManager.I.SetUpColors();          
         }
     }
 }
