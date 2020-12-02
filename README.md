@@ -12,6 +12,9 @@
   !scale | 50-300 | Scales target distance
  !mines |  | Spawns mines at random positions
  !wobble |  | Wobbles song speed
+ !womble | 50-150 | Wobbles song speed depending on value
+ !wooble |  | More retarded wobble
+ !wrobl |  | Wobble, but full retard
  !invisguns |  | Turns guns invisible
  !bettermelees |  | Turns melees into.. better melees.
  !randomoffset |  | Applies a random offset to all targets
