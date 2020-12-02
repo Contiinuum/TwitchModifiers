@@ -62,7 +62,7 @@ namespace AudicaModding
                         AudioDriver.I.SetSpeed(amount);
                         tempoRampActive = false;
                         rampmode = RampMode.Down;
-                        MelonCoroutines.Start(Timer(defaultParams.duration));
+                        MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
                         yield break;
                     }
                 }

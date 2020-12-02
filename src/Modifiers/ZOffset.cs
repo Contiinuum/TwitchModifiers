@@ -34,8 +34,9 @@ namespace AudicaModding
 
         public override void Deactivate()
         {
-            base.Deactivate();
             SetZOffset(0f);
+            base.Deactivate();
+           
         }
 
         public void SetZOffset(float zOffset)
@@ -54,7 +55,10 @@ namespace AudicaModding
 
                     if(direction == Direction.Up)
                     {
-                        oldOffsets.Add(songCues[i].tick + songCues[i].pitch, songCues[i].zOffset);
+                        if(!oldOffsets.ContainsKey(songCues[i].tick + songCues[i].pitch))
+                        {
+                            oldOffsets.Add(songCues[i].tick + songCues[i].pitch, songCues[i].zOffset);
+                        }                      
                         songCues[i].zOffset = Mathf.Lerp(songCues[i].zOffset, zOffset + songCues[i].zOffset, currentCount / count);
                     }
 
@@ -67,7 +71,7 @@ namespace AudicaModding
                     currentCount++;
                 }                    
             }
-            if(direction == Direction.Up) MelonCoroutines.Start(Timer(defaultParams.duration));
+            if(direction == Direction.Up) MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             direction = Direction.Down;
         }
 

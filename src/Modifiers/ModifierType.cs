@@ -10,7 +10,7 @@ namespace AudicaModding
     {
         AA,
         Speed,
-        Psychadelia,
+        Psychedelia,
         Mines,
         InvisGuns,
         Particles,
@@ -20,6 +20,7 @@ namespace AudicaModding
         BetterMelees,
         Scale,
         RandomColors,
-        ColorSwap
+        ColorSwap,
+        Wooble
     }
 }

@@ -28,7 +28,7 @@ namespace AudicaModding
             base.Activate();
             //if (!PlayerPreferences.I.NoFail.mVal) MelonCoroutines.Start(ResetNoFail());
             ModifierManager.invalidateScore = true;
-            MelonCoroutines.Start(Timer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             MeleesToMines(true);
         }
         

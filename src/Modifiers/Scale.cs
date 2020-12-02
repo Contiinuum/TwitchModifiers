@@ -28,7 +28,7 @@ namespace AudicaModding
             base.Activate();
             if (amount > scaleParams.maxScale) amount = scaleParams.maxScale;
             else if (amount < scaleParams.minScale) amount = scaleParams.minScale;
-            MelonCoroutines.Start(Timer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             ScaleTargets(amount, true);
         }
 

@@ -76,36 +76,47 @@ namespace AudicaModding
                 return false;
             }
         }
-
-        /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
-        private static class PatchSetSpeed
+        /*
+        [HarmonyPatch(typeof(Target), "InitFromSpawner", new Type[] { typeof(TargetSpawner.SpawnInfo), typeof(SongCues.Cue) })]
+        private static class OnCreated
         {
-            private static void PostFix(AudioDriver __instance, float speed)
+            private static void Postfix(Target __instance, TargetSpawner.SpawnInfo info, SongCues.Cue cue)
             {
-                ScoreKeeper.I.GetScoreValidity();
+                if (!ModifierManager.colorSwapActive && !ModifierManager.randomColorsActive) return;
+                if (cue.behavior != Target.TargetBehavior.Chain) return;          
+                
             }
         }
         */
-        /*
-        [HarmonyPatch(typeof(ScoreKeeper), "InvalidateScore")]
-        private static class PatchGetScoreValidity
-        {
-            private static void Postfix(ScoreKeeper __instance)
-            {
-
-                foreach (Modifier mod in ModifierManager.activeModifiers)
+                /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
+                private static class PatchSetSpeed
                 {
-                    if (mod.type == ModifierType.Speed)
+                    private static void PostFix(AudioDriver __instance, float speed)
                     {
-                        MelonLogger.Log("invalidated!");
-                        __instance.mHasInvalidatedScore = true;
-                        break;
+                        ScoreKeeper.I.GetScoreValidity();
                     }
                 }
-                //if (__result == ScoreKeeper.ScoreValidity.Valid || __result == ScoreKeeper.ScoreValidity.NoFail) return false;
-            }
-        }
-        */
+                */
+                /*
+                [HarmonyPatch(typeof(ScoreKeeper), "InvalidateScore")]
+                private static class PatchGetScoreValidity
+                {
+                    private static void Postfix(ScoreKeeper __instance)
+                    {
 
-    }
+                        foreach (Modifier mod in ModifierManager.activeModifiers)
+                        {
+                            if (mod.type == ModifierType.Speed)
+                            {
+                                MelonLogger.Log("invalidated!");
+                                __instance.mHasInvalidatedScore = true;
+                                break;
+                            }
+                        }
+                        //if (__result == ScoreKeeper.ScoreValidity.Valid || __result == ScoreKeeper.ScoreValidity.NoFail) return false;
+                    }
+                }
+                */
+
+            }
 }

@@ -16,8 +16,9 @@ namespace AudicaModding
         public static void RequestPopup(ModifierType type, string text)
         {
             if (!Config.generalParams.showModStatus) return;
+            if (activePopups.ContainsKey(type)) return;
 
-            if(popupSlots.Count == 0)
+            if (popupSlots.Count == 0)
             {
                 for(int i = 0; i < Config.generalParams.maxActiveModifiers; i++)
                 {
@@ -36,12 +37,11 @@ namespace AudicaModding
         public static void UpdatePopup(ModifierType type, string text)
         {
             if (!Config.generalParams.showModStatus) return;
-
             if (!activePopups.ContainsKey(type)) return;
             activePopups[type].popup.textMesh.text = text;
         }
 
-        public static void DestroyPopup(ModifierType type)
+        public static void RemovePopup(ModifierType type)
         {
             if (!Config.generalParams.showModStatus) return;
             if (!activePopups.ContainsKey(type)) return;
@@ -69,6 +69,7 @@ namespace AudicaModding
         {
             Vector3 pos = statusTextPosition;
             pos.y -= .3f * slot;
+
             return KataConfig.I.CreateDebugText(text, pos, 3f, null, false, 0f);
         }
 

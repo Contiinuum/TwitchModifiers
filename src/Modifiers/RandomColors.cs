@@ -27,16 +27,17 @@ namespace AudicaModding
 
         public override void Activate()
         {
-            base.Activate();
-            MelonCoroutines.Start(Timer(defaultParams.duration));
+            ModifierManager.randomColorsActive = true;
+            base.Activate();      
+            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             ChangeColors(true);
         }
 
         public override void Deactivate()
         {
-            base.Deactivate();
-            ChangeColors(false);
-
+            ModifierManager.randomColorsActive = false;
+            base.Deactivate();            
+            ChangeColors(false);          
         }
 
         public void ChangeColors(bool enable)
@@ -46,8 +47,21 @@ namespace AudicaModding
                 oldLeftHandColor = KataConfig.I.leftHandColor;
                 oldRightHandColor = KataConfig.I.rightHandColor;
 
-                leftHandColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), 1f);
-                rightHandColor = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), 1f);
+                float h1 = UnityEngine.Random.Range(0f, .49f);
+                float h2 = UnityEngine.Random.Range(.5f, 1f);
+                float s = 1f;
+                float v = 1f;
+                if(h2 > .75f)
+                {
+                    leftHandColor = Color.HSVToRGB(h1, s, v);
+                    rightHandColor = Color.HSVToRGB(h2, s, v);
+                }
+                else
+                {
+                    leftHandColor = Color.HSVToRGB(h2, s, v);
+                    rightHandColor = Color.HSVToRGB(h1, s, v);
+                }
+               
             }
             else
             {
@@ -72,23 +86,29 @@ namespace AudicaModding
                 }
             }
 
-            Target[] targets = GameObject.FindObjectsOfType<Target>();
-            for(int i = 0; i < targets.Length; i++)
-            {
-                if (targets[i].mCue.behavior != Target.TargetBehavior.Chain) continue;
-                if(targets[i].mCue.handType == Target.TargetHandType.Left)
-                {
-                    targets[i].chainLine.startColor = leftHandColor;
-                    targets[i].chainLine.endColor = leftHandColor;
-                }
-                else
-                {
-                    targets[i].chainLine.startColor = rightHandColor;
-                    targets[i].chainLine.endColor = rightHandColor;
-                }
-                
-            }
 
+            foreach(Il2CppSystem.Collections.Generic.KeyValuePair<int, TargetSpawner> spawner in TargetSpawnerManager.I.mSpawners)
+            {
+                foreach(Il2CppSystem.Collections.Generic.KeyValuePair<int, Il2CppSystem.Collections.Generic.List<Target>> targets in spawner.value.mTargetPool)
+                {
+                    foreach(Target target in targets.value)
+                    {
+                        Color rightColor = PlayerPreferences.I.GunColorRight.Get() / 2;
+                        Color leftColor = PlayerPreferences.I.GunColorLeft.Get() / 2;
+                        if (target.mCue.handType == Target.TargetHandType.Right)
+                        {
+                            target.chainLine.startColor = rightColor;
+                            target.chainLine.endColor = rightColor;
+                        }
+                        else if (target.mCue.handType == Target.TargetHandType.Left)
+                        {
+                            target.chainLine.startColor = leftColor;
+                            target.chainLine.endColor = leftColor;
+                        }
+                    }
+                }               
+            }
+    
             TargetColorSetter.I.updateColors = true;
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);

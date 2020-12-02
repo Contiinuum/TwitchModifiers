@@ -126,7 +126,7 @@ namespace AudicaModding
                 else if(command == "psy")
                 {
                     MelonLogger.Log("!psychadelia requested by " + user);
-                    CommandManager.RegisterModifier(ModifierType.Psychadelia, amount, user);
+                    CommandManager.RegisterModifier(ModifierType.Psychedelia, amount, user);
                     
                 }
                 else if(command == "mines")
@@ -141,6 +141,18 @@ namespace AudicaModding
                 else if (command == "wobble")
                 {
                       CommandManager.RegisterModifier(ModifierType.Wobble, user);
+                }
+                else if (command == "womble")
+                {
+                    CommandManager.RegisterModifier(ModifierType.Wobble, amount, user);
+                }
+                else if (command == "wooble")
+                {
+                    CommandManager.RegisterModifier(ModifierType.Wobble, -2, user);
+                }
+                else if (command == "wrobl")
+                {
+                    CommandManager.RegisterModifier(ModifierType.Wobble, -3, user);
                 }
                 else if (command == "particles")
                 {
@@ -170,6 +182,7 @@ namespace AudicaModding
                 {
                     CommandManager.RegisterModifier(ModifierType.ColorSwap, user);
                 }
+             
             }
         }
 

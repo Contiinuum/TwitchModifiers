@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-namespace AudicaModding
+﻿namespace AudicaModding
 {
     public struct ModifierParams
     {
@@ -30,18 +23,20 @@ namespace AudicaModding
         public struct General
         {
             public bool enableTwitchModifiers;
+            public bool showOnScoreOverlay;
             public bool countdownEnabled;
             public float cooldownBetweenModifiers;
             public int maxActiveModifiers;
             public bool showModStatus;
 
-            public General(bool _countdownEnabled, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
+            public General(bool _countdownEnabled, bool _showOnScoreOverlay, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
             {
                 enableTwitchModifiers = _enableTwitchModifiers;
                 countdownEnabled = _countdownEnabled;
                 cooldownBetweenModifiers = _cooldownBetweenModifiers;
                 maxActiveModifiers = _maxActiveModifiers;
                 showModStatus = _showModStatus;
+                showOnScoreOverlay = _showOnScoreOverlay;
             }
         }
 
@@ -177,13 +172,17 @@ namespace AudicaModding
         {
             public bool enabled;
             public float duration;
-            public float cooldown;        
+            public float cooldown;
+            public float minSpeed;
+            public float maxSpeed;
 
-            public Wobble(bool _enabled, float _duration, float _cooldown)
+            public Wobble(bool _enabled, float _duration, float _cooldown, float _minSpeed, float _maxSpeed)
             {
                 duration = _duration;
                 cooldown = _cooldown;
                 enabled = _enabled;
+                minSpeed = _minSpeed;
+                maxSpeed = _maxSpeed;
             }
         }
         public struct RandomColors
@@ -250,6 +249,20 @@ namespace AudicaModding
                 cooldown = _cooldown;
                 minScale = _minScale;
                 maxScale = _maxScale;
+            }
+        }
+
+        public struct Wooble
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+
+            public Wooble(bool _enabled, float _duration, float _cooldown)
+            {
+                enabled = _enabled;
+                duration = _duration;
+                cooldown = _cooldown;
             }
         }
     }

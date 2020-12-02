@@ -26,16 +26,17 @@ namespace AudicaModding
 
         public override void Activate()
         {
-            base.Activate();
-            MelonCoroutines.Start(Timer(defaultParams.duration));
+            ModifierManager.colorSwapActive = true;
+            base.Activate();           
+            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             SwapColors(true);
         }
 
         public override void Deactivate()
         {
-            base.Deactivate();
-            SwapColors(false);
-
+            ModifierManager.colorSwapActive = false;
+            base.Deactivate();          
+            SwapColors(false);         
         }
 
         public void SwapColors(bool enable)
@@ -43,11 +44,6 @@ namespace AudicaModding
 
             leftHandColor = KataConfig.I.rightHandColor;
             rightHandColor = KataConfig.I.leftHandColor;
-            
-
-           
-            
-
 
             PlayerPreferences.I.GunColorLeft.Set(leftHandColor);
             PlayerPreferences.I.GunColorRight.Set(rightHandColor);
@@ -64,7 +60,7 @@ namespace AudicaModding
                     PlayerPreferences.I.mColorPrefs[i].mVal = rightHandColor;
                 }
             }
-
+            
             Target[] targets = GameObject.FindObjectsOfType<Target>();
             for (int i = 0; i < targets.Length; i++)
             {
@@ -81,7 +77,29 @@ namespace AudicaModding
                 }
 
             }
-            
+
+            foreach (Il2CppSystem.Collections.Generic.KeyValuePair<int, TargetSpawner> spawner in TargetSpawnerManager.I.mSpawners)
+            {
+                foreach (Il2CppSystem.Collections.Generic.KeyValuePair<int, Il2CppSystem.Collections.Generic.List<Target>> targetPool in spawner.value.mTargetPool)
+                {
+                    foreach (Target target in targetPool.value)
+                    {
+                        Color rightColor = PlayerPreferences.I.GunColorRight.Get() / 2;
+                        Color leftColor = PlayerPreferences.I.GunColorLeft.Get() / 2;
+                        if (target.mCue.handType == Target.TargetHandType.Right)
+                        {
+                            target.chainLine.startColor = rightColor;
+                            target.chainLine.endColor = rightColor;
+                        }
+                        else if (target.mCue.handType == Target.TargetHandType.Left)
+                        {
+                            target.chainLine.startColor = leftColor;
+                            target.chainLine.endColor = leftColor;
+                        }
+                    }
+                }
+            }
+
             TargetColorSetter.I.updateColors = true;
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);

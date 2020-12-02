@@ -9,6 +9,7 @@ namespace AudicaModding
 
         public static ModifierParams.General generalParams;
         private static bool enableTwitchModifiers;
+        private static bool showOnScoreOverlay;
         private static bool enableCountdown;
         private static float cooldownBetweenModifiers;
         private static int maxActiveModifiers;
@@ -48,6 +49,8 @@ namespace AudicaModding
         private static bool wobbleEnabled;
         private static float wobbleDuration;
         private static float wobbleCooldown;
+        private static float wobbleMinSpeed;
+        private static float wobbleMaxSpeed;
 
         public static ModifierParams.InvisGuns invisGunsParams;
         private static string invisGunsTitle = "[Header]Invisible Guns";
@@ -111,6 +114,7 @@ namespace AudicaModding
         public static void RegisterConfig()
         {
             MelonPrefs.RegisterBool(Category, nameof(enableTwitchModifiers), true, "Enables Twitch Modifiers.");
+            MelonPrefs.RegisterBool(Category, nameof(showOnScoreOverlay), true, "Shows active modifiers and cooldowns on Score Overlay (requries Score Overlay by octo).");
             MelonPrefs.RegisterBool(Category, nameof(enableCountdown), true, "Enables Countdown before activating a modifier.");
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
             MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
@@ -145,6 +149,8 @@ namespace AudicaModding
             MelonPrefs.RegisterBool(Category, nameof(wobbleEnabled), true, "Enables this modifier.");
             MelonPrefs.RegisterFloat(Category, nameof(wobbleDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(wobbleCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(wobbleMinSpeed), .5f, "Minimum amount of speed [0.5, 1, 0.1, 0.5]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(wobbleMaxSpeed), 1.5f, "Maximum amount of speed [1, 2, 1, 1.5]{P}");
 
             MelonPrefs.RegisterString(Category, nameof(invisGunsTitle), "", invisGunsTitle);
             MelonPrefs.RegisterBool(Category, nameof(invisibleGunsEnabled), true, "Enables this modifier.");
@@ -214,12 +220,12 @@ namespace AudicaModding
 
         private static void AssignValues()
         {
-            generalParams = new ModifierParams.General(enableCountdown, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
+            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
             speedParams = new ModifierParams.Speed(speedEnabled, speedDuration, speedCooldown, minSpeed, maxSpeed);
             aimParams = new ModifierParams.AimAssist(aimAssistEnabled, aimAssistDuration, aimAssistCooldown, minAimAssist);
             psychadeliaParams = new ModifierParams.Psychedelia(psychedeliaEnabled, psychedeliaDuration, psychedeliaCooldown, minPsychedeliaSpeed, maxPsychedeliaSpeed);
             mineParams = new ModifierParams.Mines(minesEnabled, minesDuration, minesCooldown);
-            wobbleParams = new ModifierParams.Wobble(wobbleEnabled, wobbleDuration, wobbleCooldown);
+            wobbleParams = new ModifierParams.Wobble(wobbleEnabled, wobbleDuration, wobbleCooldown, wobbleMinSpeed, wobbleMaxSpeed);
             invisGunsParams = new ModifierParams.InvisGuns(invisibleGunsEnabled, invisibleGunsDuration, invisibleGunsCooldown);
             particlesParams = new ModifierParams.Particles(particlesEnabled, particlesDuration, particlesCooldown, minParticles, maxParticles);
             zOffsetParams = new ModifierParams.ZOffset(zoffsetEnabled, zoffsetDuration, zoffsetCooldown, minZoffset, maxZoffset);

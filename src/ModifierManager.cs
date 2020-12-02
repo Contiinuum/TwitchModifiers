@@ -17,7 +17,9 @@ namespace AudicaModding
 
         public static bool invalidateScore = false;
 
-        public static Dictionary<ModifierType, float> lastModifierTime = new Dictionary<ModifierType, float>();
+        public static bool randomColorsActive = false;
+        public static bool colorSwapActive = false;
+        
 
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
 
@@ -27,9 +29,7 @@ namespace AudicaModding
 
         public static void AddModifierToQueue(Modifier modifier)
         {
-            MelonLogger.Log("Check if modifier can be added..");
             if (!CanAddModifiers(modifier)) return;
-            MelonLogger.Log("Check passed, Modifier queued.");
 
             queuedModifiers.Add(modifier);
             activeModifiers.Add(modifier);
@@ -57,37 +57,27 @@ namespace AudicaModding
 
                 if (AudioDriver.I is null)
                 {
-                    MelonLogger.Log("Song hasn't started yet.");
+                    MelonLogger.Log("AudioDriver is null.");
                     return false;
                 }
                   
                 if (AudioDriver.I.IsPlaying())
                 {
-                    float tick = AudioDriver.I.mCachedTick;
-                    if(SongCues.I.GetLastCueStartTick() > tick + 7680)
+                    if(SongCues.I.GetLastCueStartTick() > AudioDriver.I.mCachedTick + 7680)
                     {
-                        float time;
-                        if (lastModifierTime.TryGetValue(modifier.type, out time))
-                        {
-                            if ((time + modifier.defaultParams.cooldown) <= AudioDriver.I.GetSongPositionSeconds(AudioDriver.TickContext.Audio)) return true;
-                            else
-                            {
-                                MelonLogger.Log("Modifier is on cooldown.");
-                                return false;
-                            }
-                               
-
-                        }
-                        else
-                        {
-                            lastModifierTime.Add(modifier.type, 0f);
-                            return true;
-                        }
-                        
-                    }                    
+                        return true;                                           
+                    }
+                    else
+                    {
+                        MelonLogger.Log("Song is about to end. Mod can't be activated.");
+                    }
+                }
+                else
+                {
+                    MelonLogger.Log("Song hasn't started yet.");
                 }
             }
-            MelonLogger.Log("Failed check.");
+            MelonLogger.Log("Currently not in a song.");
             return false;
         }
 
@@ -98,7 +88,7 @@ namespace AudicaModding
             {
                 timerActive = true;
                 
-                string colortag = modifier.type == ModifierType.AA ? "<color=\"orange\">" : modifier.type == ModifierType.Psychadelia ? "<color=\"blue\">" : modifier.type == ModifierType.Mines ? "<color=\"red\">" : modifier.type == ModifierType.Speed ? "<color=\"green\">" : "";
+                string colortag = modifier.type == ModifierType.AA ? "<color=\"orange\">" : modifier.type == ModifierType.Psychedelia ? "<color=\"blue\">" : modifier.type == ModifierType.Mines ? "<color=\"red\">" : modifier.type == ModifierType.Speed ? "<color=\"green\">" : "";
                 while (countdownTimer > 0)
                 {
                     if (!InGameUI.I.pauseScreen.IsPaused())
@@ -131,21 +121,27 @@ namespace AudicaModding
        
         public static void UnregisterModifier(Modifier mod)
         {
-            lastModifierTime[mod.type] = AudioDriver.I.GetSongPositionSeconds(AudioDriver.TickContext.Audio);
-            activeModifiers.Remove(mod);           
+            //CooldownManager.SetLastModifierTime(mod);
+            //activeModifiers.Remove(mod);           
+        }
+
+        public static void RemoveActiveModifier(Modifier mod)
+        {
+            activeModifiers.Remove(mod);
         }
 
         public static IEnumerator Reset()
         {              
             stopAllModifiers = true;
             yield return new WaitForSecondsRealtime(1.5f);
-            for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();
-            StatusTextManager.DestroyAllPopups();
-            lastModifierTime.Clear();
+            ModStatusHandler.RemoveAllDisplays();
+            for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();      
+            //CooldownManager.ResetCooldowns();
             timerActive = false;
             queuedModifiers.Clear();
             stopAllModifiers = false;
             invalidateScore = false;
+            activeModifiers.Clear();
         }      
     }
 }

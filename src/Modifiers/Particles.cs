@@ -23,7 +23,7 @@ namespace AudicaModding
         public override void Activate()
         {
             base.Activate();
-            MelonCoroutines.Start(Timer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
             SetParticleScale(amount);
         }
 

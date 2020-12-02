@@ -19,7 +19,7 @@ namespace AudicaModding
             public const string Name = "TwitchModifiers";  // Name of the Mod.  (MUST BE SET)
             public const string Author = "Continuum"; // Author of the Mod.  (Set as null if none)
             public const string Company = null; // Company that made the Mod.  (Set as null if none)
-            public const string Version = "0.1.0"; // Version of the Mod.  (MUST BE SET)
+            public const string Version = "2.0.0"; // Version of the Mod.  (MUST BE SET)
             public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none)
         }
 
@@ -27,6 +27,8 @@ namespace AudicaModding
         {
             HarmonyInstance instance = HarmonyInstance.Create("TwitchModifiers");
             Config.RegisterConfig();
+            ScoreOverlayIntegration.LookForScoreOverlay();
+
         }
 
         public override void OnModSettingsApplied()
@@ -41,7 +43,6 @@ namespace AudicaModding
 
         public static void RegisterModifier(ModifierType type, float amount, string user)
         {
-            MelonLogger.Log("Checking active modifiers count...");
             if(ModifierManager.activeModifiers.Count > 0)
             {
                 foreach(Modifier activeMod in ModifierManager.activeModifiers)
@@ -56,7 +57,6 @@ namespace AudicaModding
                     }
                 }
             }
-            MelonLogger.Log("Check passed. Creating mod...");
             Modifier mod = null;
             switch (type)
             {
@@ -66,14 +66,14 @@ namespace AudicaModding
                 case ModifierType.AA:
                     if (Config.aimParams.enabled) mod = new AimAssistChange(type, new ModifierParams.Default("Aim Assist Lower", user), Config.aimParams, amount);
                     break;
-                case ModifierType.Psychadelia:
+                case ModifierType.Psychedelia:
                     if (Config.psychadeliaParams.enabled) mod = new Psychadelia(type, new ModifierParams.Default("Psychedelia", user), Config.psychadeliaParams, amount);
                     break;
                 case ModifierType.Mines:
                     if (Config.mineParams.enabled) mod = new Mines(type, new ModifierParams.Default("Mines", user), Config.mineParams);
                     break;
                 case ModifierType.Wobble:
-                    if (Config.wobbleParams.enabled) mod = new Wobble(type, new ModifierParams.Default("Wobble", user), Config.wobbleParams);
+                    if (Config.wobbleParams.enabled) mod = new Wobble(type, new ModifierParams.Default("Wobble", user), Config.wobbleParams, amount);
                     break;
                 case ModifierType.InvisGuns:
                     if (Config.invisGunsParams.enabled) mod = new InvisibleGuns(type, new ModifierParams.Default("Invisible Guns", user), Config.invisGunsParams);
@@ -103,12 +103,11 @@ namespace AudicaModding
                     return;
             }
             if (mod is null) return;
-            MelonLogger.Log("Mod added to active modifiers.");
             ModifierManager.AddModifierToQueue(mod);
         }
 
         public override void OnUpdate()
-        {           
+        {
             /*
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
@@ -121,7 +120,8 @@ namespace AudicaModding
             if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!bettermelees");
             if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!randomoffset");
             if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!scale 150");
-            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
+            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!randomcolors");
+            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!colorswap");
             */
         }
 
