@@ -1,5 +1,9 @@
 # TwitchModifiers
 
+# Important
+* For easier value tweaking get [Mod Settings mod written by october](https://github.com/octoberU/ModSettings/releases/latest)
+* This Mod works with Score Overlay 2.0.3 and newer - grab it here [Score Overlay mod written by october](https://github.com/octoberU/ScoreOverlay/releases//latest)
+
 ## Command List and Default Values
 
  Command  | Default Values | Description 
