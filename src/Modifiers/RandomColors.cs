@@ -86,7 +86,7 @@ namespace AudicaModding
                 }
             }
 
-
+            /*
             foreach(Il2CppSystem.Collections.Generic.KeyValuePair<int, TargetSpawner> spawner in TargetSpawnerManager.I.mSpawners)
             {
                 foreach(Il2CppSystem.Collections.Generic.KeyValuePair<int, Il2CppSystem.Collections.Generic.List<Target>> targets in spawner.value.mTargetPool)
@@ -108,7 +108,7 @@ namespace AudicaModding
                     }
                 }               
             }
-    
+            */
             TargetColorSetter.I.updateColors = true;
             TargetColorSetter.I.UpdateSlowColors(leftHandColor, rightHandColor);
             TargetColorSetter.I.UpdateFastColors(leftHandColor, rightHandColor);
