@@ -99,6 +99,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TimingAttack">
+      <HintPath>..\..\..\..\..\Games\Steam\steamapps\common\Audica\Mods\TimingAttack.dll</HintPath>
+    </Reference>
     <Reference Include="TwitchChatter">
       <HintPath>lib\TwitchChatter.dll</HintPath>
       <Private>False</Private>
@@ -190,7 +193,10 @@
     <Compile Include="src\Modifiers\AimAssistChange.cs" />
     <Compile Include="src\CommandManager.cs" />
     <Compile Include="src\Modifiers\BetterMelees.cs" />
+    <Compile Include="src\Modifiers\HiddenTelegraphs.cs" />
+    <Compile Include="src\Integrations.cs" />
     <Compile Include="src\Modifiers\ModifierType.cs" />
+    <Compile Include="src\Modifiers\Nuke.cs" />
     <Compile Include="src\Modifiers\RandomColors.cs" />
     <Compile Include="src\Modifiers\InvisibleGuns.cs" />
     <Compile Include="src\Modifiers\Mines.cs" />
@@ -205,6 +211,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Modifiers\Modifier.cs" />
     <Compile Include="src\Modifiers\ColorSwap.cs" />
+    <Compile Include="src\Modifiers\StreamMode.cs" />
+    <Compile Include="src\Modifiers\TimingAttack.cs" />
+    <Compile Include="src\Modifiers\UnifyColors.cs" />
     <Compile Include="src\ModStatusHandler.cs" />
     <Compile Include="src\ScoreOverlayIntegration.cs" />
     <Compile Include="src\StatusTextManager.cs" />

@@ -22,9 +22,25 @@ namespace AudicaModding
             defaultParams.cooldown = _wobbleParams.cooldown;
             mode = _amount == -3 ? Mode.Wrobl : _amount == -2 ? Mode.Wooble : _amount == 0 ? Mode.Wobble : Mode.Womble;
             amount = _amount;
-
             if (amount > wobbleParams.maxSpeed) amount = wobbleParams.maxSpeed;
             if (amount < wobbleParams.minSpeed) amount = wobbleParams.minSpeed;
+            switch (mode)
+            {
+                case Mode.Womble:
+                    if (wobbleParams.wombleEnabled) defaultParams.name = "Womble";
+                    else mode = Mode.Wobble;
+                    break;
+                case Mode.Wooble:
+                    if (wobbleParams.woobleEnabled) defaultParams.name = "Wooble";
+                    else mode = Mode.Wobble;
+                    break;
+                case Mode.Wrobl:
+                    if (wobbleParams.wroblEnabled) defaultParams.name = "Wrobl";
+                    else mode = Mode.Wobble;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override void Activate()
@@ -34,7 +50,7 @@ namespace AudicaModding
             if (mode == Mode.Wobble) GameplayModifiers.I.ActivateModifier(GameplayModifiers.Modifier.SpeedWobble);
             else MelonCoroutines.Start(DoWobble());
 
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer());
             
         }
 
@@ -58,11 +74,30 @@ namespace AudicaModding
             }
         }
 
+        private IEnumerator DisableWobble()
+        {
+            float lastSpeed = AudioDriver.I.mSpeed;
+            float progress = 0;
+            while (defaultParams.active)
+            {
+                AudioDriver.I.SetSpeed(Mathf.Lerp(lastSpeed, 1f, progress / 100f));
+                if ((amount < 1f && AudioDriver.I.mSpeed >= 1f) || (amount > 1f && AudioDriver.I.mSpeed <= 1f))
+                {
+                    AudioDriver.I.SetSpeed(1f);
+                    base.Deactivate();
+                    yield break;
+                }
+                progress++;
+                yield return new WaitForSecondsRealtime(.002f);
+            }
+        }
+
         public override void Deactivate()
         {
-            base.Deactivate();
+            //base.Deactivate();
             if(mode == Mode.Wobble) GameplayModifiers.I.DeactivateModifier(GameplayModifiers.Modifier.SpeedWobble);
-            AudioDriver.I.SetSpeed(1f);
+            else MelonCoroutines.Start(DisableWobble());
+            //AudioDriver.I.SetSpeed(1f);
         }
 
         private enum Mode

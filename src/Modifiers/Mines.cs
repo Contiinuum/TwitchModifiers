@@ -29,7 +29,7 @@ namespace AudicaModding
         {
             base.Activate();
             //if (!PlayerPreferences.I.NoFail.mVal) MelonCoroutines.Start(ResetNoFail());
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer());
             MelonCoroutines.Start(SpawnMines());
         }
 

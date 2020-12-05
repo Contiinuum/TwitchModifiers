@@ -71,7 +71,7 @@ namespace AudicaModding
                     currentCount++;
                 }                    
             }
-            if(direction == Direction.Up) MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            if(direction == Direction.Up) MelonCoroutines.Start(ActiveTimer());
             direction = Direction.Down;
         }
 

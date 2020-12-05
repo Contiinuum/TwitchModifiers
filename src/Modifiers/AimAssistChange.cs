@@ -25,7 +25,7 @@ namespace AudicaModding
             base.Activate();
             if (amount < aimAssistParams.minAimAssist) amount = aimAssistParams.minAimAssist;
             PlayerPreferences.I.AimAssistAmount.mVal = amount;
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));         
+            MelonCoroutines.Start(ActiveTimer());         
         }
 
         public override void Deactivate()

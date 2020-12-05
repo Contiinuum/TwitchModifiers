@@ -27,7 +27,8 @@ namespace AudicaModding
         {
             HarmonyInstance instance = HarmonyInstance.Create("TwitchModifiers");
             Config.RegisterConfig();
-            ScoreOverlayIntegration.LookForScoreOverlay();
+            //ScoreOverlayIntegration.LookForScoreOverlay();
+            Integrations.LookForIntegrations();
 
         }
 
@@ -36,68 +37,111 @@ namespace AudicaModding
             Config.OnModSettingsApplied();
         }
 
-        public static void RegisterModifier(ModifierType type, string user)
+        public static void RegisterModifier(ModifierType type, string user, string color)
         {
-            RegisterModifier(type, 0, user);
+            RegisterModifier(type, 0, user, color);
         }
 
-        public static void RegisterModifier(ModifierType type, float amount, string user)
+        public static void RegisterModifier(ModifierType type, float amount, string user, string color)
         {
-            if(ModifierManager.activeModifiers.Count > 0)
+            if (ModifierManager.activeModifiers.Count > 0)
             {
-                foreach(Modifier activeMod in ModifierManager.activeModifiers)
+                foreach (Modifier activeMod in ModifierManager.activeModifiers)
                 {
-                    if(activeMod.type == type)
+                    if (activeMod.type == type)
                     {
                         return;
                     }
-                    if((type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
+                    else if ((type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
+                    {
+                        return;
+                    }
+                    else if (type == ModifierType.UnifyColors && (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap) || (type == ModifierType.RandomColors || type == ModifierType.ColorSwap) && activeMod.type == ModifierType.UnifyColors)
+                    {
+                        return;
+                    }
+                    else if (type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
+                    {
+                        return;
+                    }
+                    else if((type == ModifierType.ZOffset && activeMod.type == ModifierType.Scale) || (type == ModifierType.Scale && activeMod.type == ModifierType.ZOffset))
                     {
                         return;
                     }
                 }
             }
+            CreateModifier(type, amount, user, color);
+        }
+
+        public static void CreateModifier(ModifierType type, float amount, string user, string color)
+        {
+
+
             Modifier mod = null;
             switch (type)
             {
                 case ModifierType.Speed:
-                    if(Config.speedParams.enabled) mod = new SpeedChange(type, new ModifierParams.Default("Speed Change", user), Config.speedParams, amount);
+                    if (Config.speedParams.enabled)
+                    {
+                        if (!Config.generalParams.allowScoreDisablingMods && amount < 1f) return;
+                        mod = new SpeedChange(type, new ModifierParams.Default("Speed", user, color), Config.speedParams, amount);
+                    }
+                        
                     break;
                 case ModifierType.AA:
-                    if (Config.aimParams.enabled) mod = new AimAssistChange(type, new ModifierParams.Default("Aim Assist Lower", user), Config.aimParams, amount);
+                    if (Config.aimParams.enabled) mod = new AimAssistChange(type, new ModifierParams.Default("AA", user, color), Config.aimParams, amount);
                     break;
                 case ModifierType.Psychedelia:
-                    if (Config.psychadeliaParams.enabled) mod = new Psychadelia(type, new ModifierParams.Default("Psychedelia", user), Config.psychadeliaParams, amount);
+                    if (Config.psychadeliaParams.enabled) mod = new Psychadelia(type, new ModifierParams.Default("Psychedelia", user, color), Config.psychadeliaParams, amount);
                     break;
                 case ModifierType.Mines:
-                    if (Config.mineParams.enabled) mod = new Mines(type, new ModifierParams.Default("Mines", user), Config.mineParams);
+                    if (Config.mineParams.enabled) mod = new Mines(type, new ModifierParams.Default("Mines", user, color), Config.mineParams);
                     break;
                 case ModifierType.Wobble:
-                    if (Config.wobbleParams.enabled) mod = new Wobble(type, new ModifierParams.Default("Wobble", user), Config.wobbleParams, amount);
+                    if (Config.wobbleParams.enabled) mod = new Wobble(type, new ModifierParams.Default("Wobble", user, color), Config.wobbleParams, amount);
                     break;
                 case ModifierType.InvisGuns:
-                    if (Config.invisGunsParams.enabled) mod = new InvisibleGuns(type, new ModifierParams.Default("Invisible Guns", user), Config.invisGunsParams);
+                    if (Config.invisGunsParams.enabled) mod = new InvisibleGuns(type, new ModifierParams.Default("Invis Guns", user, color), Config.invisGunsParams);
                     break;
                 case ModifierType.Particles:
-                    if (Config.particlesParams.enabled) mod = new Particles(type, new ModifierParams.Default("Particles", user), Config.particlesParams, amount);
+                    if (Config.particlesParams.enabled) mod = new Particles(type, new ModifierParams.Default("Particles", user, color), Config.particlesParams, amount);
                     break;
                 case ModifierType.ZOffset:
-                    if (Config.zOffsetParams.enabled) mod = new ZOffset(type, new ModifierParams.Default("zOffset", user), Config.zOffsetParams, amount);
+                    if (Config.zOffsetParams.enabled) mod = new ZOffset(type, new ModifierParams.Default("zOffset", user, color), Config.zOffsetParams, amount);
                     break;
                 case ModifierType.BetterMelees:
-                    if (Config.betterMeleesParams.enabled) mod = new BetterMelees(type, new ModifierParams.Default("Better Melees", user), Config.betterMeleesParams);
+                    if (Config.betterMeleesParams.enabled) mod = new BetterMelees(type, new ModifierParams.Default("Better Melees", user, color), Config.betterMeleesParams);
                     break;
                 case ModifierType.RandomOffset:
-                    if (Config.randomOffsetParams.enabled) mod = new RandomOffset(type, new ModifierParams.Default("Random Offset", user), Config.randomOffsetParams);
+                    if (Config.randomOffsetParams.enabled) mod = new RandomOffset(type, new ModifierParams.Default("Random Offset", user, color), Config.randomOffsetParams);
                     break;
                 case ModifierType.Scale:
-                    if (Config.scaleParams.enabled) mod = new Scale(type, new ModifierParams.Default("Scale", user), Config.scaleParams, amount);
+                    if (Config.scaleParams.enabled) mod = new Scale(type, new ModifierParams.Default("Scale", user, color), Config.scaleParams, amount);
                     break;
                 case ModifierType.RandomColors:
-                    if (Config.randomColorParams.enabled) mod = new RandomColors(type, new ModifierParams.Default("Random Colors", user), Config.randomColorParams);
+                    if (Config.randomColorParams.enabled) mod = new RandomColors(type, new ModifierParams.Default("Random Colors", user, color), Config.randomColorParams);
                     break;
                 case ModifierType.ColorSwap:
-                    if (Config.colorSwapParams.enabled) mod = new ColorSwap(type, new ModifierParams.Default("Color Swap", user), Config.colorSwapParams);
+                    if (Config.colorSwapParams.enabled) mod = new ColorSwap(type, new ModifierParams.Default("Color Swap", user, color), Config.colorSwapParams);
+                    break;
+                case ModifierType.StreamMode:
+                    if (Config.streamModeParams.enabled)
+                    {
+                        if (!Config.generalParams.allowScoreDisablingMods) return;
+                        mod = new StreamMode(type, new ModifierParams.Default("Stream Mode", user, color), Config.streamModeParams, amount);
+                    } 
+                    break;
+                case ModifierType.HiddenTelegraphs:
+                    if (Config.hiddenTelegraphsParams.enabled) mod = new HiddenTelegraphs(type, new ModifierParams.Default("Hidden Teles", user, color), Config.hiddenTelegraphsParams);
+                    break;
+                case ModifierType.UnifyColors:
+                    if (Config.unifyColorsParams.enabled) mod = new UnifyColors(type, new ModifierParams.Default("Unify Colors", user, color), Config.unifyColorsParams);
+                    break;
+                case ModifierType.TimingAttack:
+                    if (Config.timingAttackParams.enabled) mod = new TimingAttack(type, new ModifierParams.Default("Timing Attack", user, color), Config.timingAttackParams);
+                    break;
+                case ModifierType.Nuke:
+                    if (Config.nukeParams.enabled) mod = new Nuke(type, new ModifierParams.Default("Nuke", user, color), Config.nukeParams);
                     break;
                 default:
                     return;
@@ -108,6 +152,7 @@ namespace AudicaModding
 
         public override void OnUpdate()
         {
+            //if (Input.GetKeyDown(KeyCode.T)) DebugCommand("!nuke");
             /*
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
@@ -117,17 +162,20 @@ namespace AudicaModding
             if (Input.GetKeyDown(KeyCode.H)) DebugCommand("!wobble 150");
             if (Input.GetKeyDown(KeyCode.J)) DebugCommand("!particles 150");
             if (Input.GetKeyDown(KeyCode.K)) DebugCommand("!zoffset 150");
-            if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!bettermelees");
-            if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!randomoffset");
-            if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!scale 150");
-            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!randomcolors");
-            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!colorswap");
+            if (Input.GetKeyDown(KeyCode.L)) DebugCommand("!bettermelees");
+            if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!randomoffset");
+            if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!scale 150");
+            if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!randomcolors");
+            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
+            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!unhookchains");
+            if (Input.GetKeyDown(KeyCode.N)) DebugCommand("!hiddenteles");            
+            if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!streammode");
             */
         }
 
         private void DebugCommand(string command)
         {
-            TwitchHandler.ParseCommand(command, "conti");
+            TwitchHandler.ParseCommand(command, "conti", "color=#FFFFFF");
         }
     }
 }

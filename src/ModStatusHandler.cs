@@ -8,33 +8,40 @@ namespace AudicaModding
 {
     public class ModStatusHandler
     {
-        public static void RequestStatusDisplays(ModifierType type, string text)
+        public static void ShowEnabledString()
         {
-            StatusTextManager.RequestPopup(type, text);           
-            if (ScoreOverlayIntegration.scoreOverlayFound)
+            if (Integrations.scoreOverlayFound)
             {
-                ScoreOverlayIntegration.RequestOverlayDisplay(type, "<color=\"green\">" + text);              
+                ScoreOverlay.ShowEnabledString();
+            }
+        }
+        public static void RequestStatusDisplays(ModifierType type, string command, string amount, string user, string color)
+        {
+            StatusTextManager.RequestPopup(type, command, amount);           
+            if (Integrations.scoreOverlayFound)
+            {
+                ScoreOverlay.RequestOverlayDisplay(type, command, amount, user, color);              
             }               
         }
 
-        public static void UpdateStatusDisplays(ModifierType type, string text, UpdateType updateType)
+        public static void UpdateStatusDisplays(ModifierType type, string command, string amount, string user, string color, UpdateType updateType)
         {
             switch (updateType)
             {
                 case UpdateType.All:
-                    StatusTextManager.UpdatePopup(type, text);
-                    if (ScoreOverlayIntegration.scoreOverlayFound)
+                    StatusTextManager.UpdatePopup(type, command, amount);
+                    if (Integrations.scoreOverlayFound)
                     {
-                        ScoreOverlayIntegration.UpdateOverlay(type, "<color=\"green\">" + text);                  
+                        ScoreOverlay.UpdateOverlay(type, command, amount, user, color, ScoreOverlay.State.Active);                  
                     }
                     break;
                 case UpdateType.Ingame:
-                    StatusTextManager.UpdatePopup(type, text);
+                    StatusTextManager.UpdatePopup(type, command, amount);
                     break;
                 case UpdateType.ScoreOverlay:
-                    if (ScoreOverlayIntegration.scoreOverlayFound)
+                    if (Integrations.scoreOverlayFound)
                     {
-                        ScoreOverlayIntegration.UpdateOverlay(type, "<color=\"red\">" + text);                    
+                        ScoreOverlay.UpdateOverlay(type, command, amount, user, color, ScoreOverlay.State.Cooldown);                    
                     }
                     break;
             }
@@ -47,18 +54,18 @@ namespace AudicaModding
             {
                 case UpdateType.All:
                     StatusTextManager.RemovePopup(type);
-                    if (ScoreOverlayIntegration.scoreOverlayFound)
+                    if (Integrations.scoreOverlayFound)
                     {
-                        ScoreOverlayIntegration.RemoveOverlay(type);
+                        ScoreOverlay.RemoveOverlay(type);
                     }
                     break;
                 case UpdateType.Ingame:
                     StatusTextManager.RemovePopup(type);
                     break;
                 case UpdateType.ScoreOverlay:
-                    if (ScoreOverlayIntegration.scoreOverlayFound)
+                    if (Integrations.scoreOverlayFound)
                     {
-                        ScoreOverlayIntegration.RemoveOverlay(type);
+                        ScoreOverlay.RemoveOverlay(type);
                     }
                     break;
             }
@@ -67,9 +74,9 @@ namespace AudicaModding
         public static void RemoveAllDisplays()
         {
             StatusTextManager.DestroyAllPopups();
-            if (ScoreOverlayIntegration.scoreOverlayFound)
+            if (Integrations.scoreOverlayFound)
             {
-                ScoreOverlayIntegration.RemoveAllOverlays();
+                ScoreOverlay.RemoveAllOverlays();
             }
                 
         }

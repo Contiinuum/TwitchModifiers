@@ -1,12 +1,5 @@
 ﻿using MelonLoader;
-using UnityEngine;
-using Harmony;
-using System;
-using UnityEngine.Events;
-using TMPro;
-using System.Collections;
 using System.Linq;
-using Il2CppSystem;
 
 
 namespace AudicaModding
@@ -41,11 +34,10 @@ namespace AudicaModding
 
             string separator = ":";
             string tagSeparator = ";";
-
             string tags = msg.Split(separator.ToCharArray())[0];
-
             parsedMsg.user = msg.Split(separator.ToCharArray())[1];
             parsedMsg.message = msg.Split(separator.ToCharArray())[2];
+            string color = msg.Split(tagSeparator.ToCharArray())[3];
 
             foreach (string str in tags.Split(tagSeparator.ToCharArray()).ToList())
             {
@@ -102,10 +94,11 @@ namespace AudicaModding
                     parsedMsg.userId = str.Replace("user-id=", "");
                 }
             }
+            parsedMsg.color = color;
             return parsedMsg;
         }
 
-        public static void ParseCommand(string msg, string user)
+        public static void ParseCommand(string msg, string user, string color)
         {
             if (!Config.generalParams.enableTwitchModifiers) return;
             if (msg.Substring(0, 1) == "!")
@@ -114,75 +107,97 @@ namespace AudicaModding
                 string arguments = msg.Replace("!" + command + " ", "");
                 float amount = ParseAmount(arguments) / 100;
                 if (amount < 0 && command != "zoffset") return;
-                if (command == "speed")
+                if(amount > 0)
                 {
-                    CommandManager.RegisterModifier(ModifierType.Speed, amount, user);
+                    if (command == "speed")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Speed, amount, user, color);
+                    }
+                    else if (command == "aa")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.AA, amount, user, color);
+                    }
+                    else if (command == "psy")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Psychedelia, amount, user, color);
+
+                    }
+                    else if (command == "womble")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Wobble, amount, user, color);
+                    }
+                    else if (command == "particles")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Particles, amount, user, color);
+                    }
+                    else if (command == "zoffset")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.ZOffset, amount, user, color);
+                    }
+                    else if (command == "scale")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Scale, amount, user, color);
+                    }
                 }
-                else if(command == "aa")
+                else
                 {
-                    CommandManager.RegisterModifier(ModifierType.AA, amount, user);
-                    MelonLogger.Log("!aa requested by " + user);                                           
-                }
-                else if(command == "psy")
-                {
-                    MelonLogger.Log("!psychadelia requested by " + user);
-                    CommandManager.RegisterModifier(ModifierType.Psychedelia, amount, user);
-                    
-                }
-                else if(command == "mines")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Mines, user);
-                    MelonLogger.Log("!mines requested by " + user);
-                }
-                else if(command == "invisguns")
-                {
-                    CommandManager.RegisterModifier(ModifierType.InvisGuns, user);
-                }
-                else if (command == "wobble")
-                {
-                      CommandManager.RegisterModifier(ModifierType.Wobble, user);
-                }
-                else if (command == "womble")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Wobble, amount, user);
-                }
-                else if (command == "wooble")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Wobble, -2, user);
-                }
-                else if (command == "wrobl")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Wobble, -3, user);
-                }
-                else if (command == "particles")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Particles, amount, user);
-                }
-                else if (command == "zoffset")
-                {
-                    CommandManager.RegisterModifier(ModifierType.ZOffset, amount, user);
-                }
-                else if(command == "randomoffset")
-                {
-                    CommandManager.RegisterModifier(ModifierType.RandomOffset, user);
-                }
-                else if(command == "bettermelees")
-                {
-                    CommandManager.RegisterModifier(ModifierType.BetterMelees, user);
-                }
-                else if(command == "scale")
-                {
-                    CommandManager.RegisterModifier(ModifierType.Scale, amount, user);
-                }
-                else if(command == "randomcolors")
-                {
-                    CommandManager.RegisterModifier(ModifierType.RandomColors, user);
-                }
-                else if(command == "colorswap")
-                {
-                    CommandManager.RegisterModifier(ModifierType.ColorSwap, user);
-                }
-             
+                    if (command == "mines")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Mines, user, color);
+                    }
+                    else if (command == "invisguns")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.InvisGuns, user, color);
+                    }
+                    else if (command == "wobble")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Wobble, user, color);
+                    }
+                    else if (command == "wooble")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Wobble, -2, user, color);
+                    }
+                    else if (command == "wrobl")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Wobble, -3, user, color);
+                    }
+                    else if (command == "randomoffset")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.RandomOffset, user, color);
+                    }
+                    else if (command == "bettermelees")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.BetterMelees, user, color);
+                    }
+                    else if (command == "randomcolors")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.RandomColors, user, color);
+                    }
+                    else if (command == "colorswap")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.ColorSwap, user, color);
+                    }
+                    else if (command == "streammode")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.StreamMode, amount, user, color);
+                    }
+                    else if (command == "hiddenteles")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.HiddenTelegraphs, user, color);
+                    }
+                    else if(command == "unifycolors")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.UnifyColors, user, color);
+                    }
+                    else if(command == "rtxon")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.TimingAttack, user, color);
+                    }
+                    else if(command == "dropnuke")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.Nuke, user, color);
+                    }
+                }        
             }
         }
 

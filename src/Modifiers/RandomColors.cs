@@ -29,8 +29,9 @@ namespace AudicaModding
         {
             ModifierManager.randomColorsActive = true;
             base.Activate();      
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer());
             ChangeColors(true);
+            Hooks.updateChainColor = true;
         }
 
         public override void Deactivate()
@@ -44,8 +45,17 @@ namespace AudicaModding
         {
             if (enable)
             {
-                oldLeftHandColor = KataConfig.I.leftHandColor;
-                oldRightHandColor = KataConfig.I.rightHandColor;
+                if (ModifierManager.colorSwapActive)
+                {
+                    oldLeftHandColor = KataConfig.I.rightHandColor;
+                    oldRightHandColor = KataConfig.I.leftHandColor;
+                }
+                else
+                {
+                    oldLeftHandColor = KataConfig.I.leftHandColor;
+                    oldRightHandColor = KataConfig.I.rightHandColor;
+                }
+                
 
                 float h1 = UnityEngine.Random.Range(0f, .49f);
                 float h2 = UnityEngine.Random.Range(.5f, 1f);
@@ -65,8 +75,17 @@ namespace AudicaModding
             }
             else
             {
-                leftHandColor = oldLeftHandColor;
-                rightHandColor = oldRightHandColor;
+                if (ModifierManager.colorSwapActive)
+                {
+                    leftHandColor = oldRightHandColor;
+                    rightHandColor = oldLeftHandColor;
+                }
+                else
+                {
+                    leftHandColor = oldLeftHandColor;
+                    rightHandColor = oldRightHandColor;
+                }
+                
             }
             
 

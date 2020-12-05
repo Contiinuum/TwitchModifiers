@@ -28,8 +28,9 @@ namespace AudicaModding
         {
             ModifierManager.colorSwapActive = true;
             base.Activate();           
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer());
             SwapColors(true);
+            Hooks.updateChainColor = true;
         }
 
         public override void Deactivate()
@@ -41,10 +42,17 @@ namespace AudicaModding
 
         public void SwapColors(bool enable)
         {
-
-            leftHandColor = KataConfig.I.rightHandColor;
-            rightHandColor = KataConfig.I.leftHandColor;
-
+            if (ModifierManager.randomColorsActive && !enable)
+            {
+                leftHandColor = KataConfig.I.leftHandColor;
+                rightHandColor = KataConfig.I.rightHandColor;
+            }
+            else
+            {
+                leftHandColor = KataConfig.I.rightHandColor;
+                rightHandColor = KataConfig.I.leftHandColor;
+            }
+         
             PlayerPreferences.I.GunColorLeft.Set(leftHandColor);
             PlayerPreferences.I.GunColorRight.Set(rightHandColor);
             KataConfig.I.leftHandColor = leftHandColor;

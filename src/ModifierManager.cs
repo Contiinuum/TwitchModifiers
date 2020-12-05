@@ -19,6 +19,8 @@ namespace AudicaModding
 
         public static bool randomColorsActive = false;
         public static bool colorSwapActive = false;
+
+        public static bool nukeActive = false;
         
 
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
@@ -49,12 +51,6 @@ namespace AudicaModding
         {
             if (MenuState.sState == MenuState.State.Launched)
             {
-                if(activeModifiers.Count >= Config.generalParams.maxActiveModifiers)
-                {
-                    MelonLogger.Log("Max active modifiers reached.");
-                    return false;
-                }
-
                 if (AudioDriver.I is null)
                 {
                     MelonLogger.Log("AudioDriver is null.");
@@ -63,20 +59,30 @@ namespace AudicaModding
                   
                 if (AudioDriver.I.IsPlaying())
                 {
-                    if(SongCues.I.GetLastCueStartTick() > AudioDriver.I.mCachedTick + 7680)
-                    {
-                        return true;                                           
-                    }
-                    else
+                    if(SongCues.I.GetLastCueStartTick() < AudioDriver.I.mCachedTick + 7680)
                     {
                         MelonLogger.Log("Song is about to end. Mod can't be activated.");
+                        return false;                                           
                     }
                 }
                 else
                 {
                     MelonLogger.Log("Song hasn't started yet.");
+                    return false;
                 }
+
+                if (nukeActive) return true;
+
+                if (activeModifiers.Count >= Config.generalParams.maxActiveModifiers)
+                {
+                    MelonLogger.Log("Max active modifiers reached.");
+                    return false;
+                }
+
+                
+                return true;
             }
+
             MelonLogger.Log("Currently not in a song.");
             return false;
         }
@@ -84,7 +90,7 @@ namespace AudicaModding
         private static IEnumerator Countdown(Modifier modifier, float countdownTimer = 4)
         {
             yield return new WaitForSecondsRealtime(.2f);
-            if (Config.generalParams.countdownEnabled)
+            if (Config.generalParams.countdownEnabled && !nukeActive)
             {
                 timerActive = true;
                 
@@ -109,20 +115,15 @@ namespace AudicaModding
             
             timerActive = false;
             queuedModifiers.Remove(modifier);
-            if (!stopAllModifiers) modifier.Activate();          
+            if (!stopAllModifiers) modifier.Activate();
+            yield return new WaitForSeconds(nukeActive ? .1f : Config.generalParams.cooldownBetweenModifiers);
             ProcessQueue();
-            yield return new WaitForSeconds(Config.generalParams.cooldownBetweenModifiers);
+            yield return null;
         }
 
         public static void DebugText(string text, float speed)
         {
             KataConfig.I.CreateDebugText(text, debugTextPosition, 5f, null, false, speed);
-        }
-       
-        public static void UnregisterModifier(Modifier mod)
-        {
-            //CooldownManager.SetLastModifierTime(mod);
-            //activeModifiers.Remove(mod);           
         }
 
         public static void RemoveActiveModifier(Modifier mod)
@@ -136,12 +137,30 @@ namespace AudicaModding
             yield return new WaitForSecondsRealtime(1.5f);
             ModStatusHandler.RemoveAllDisplays();
             for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();      
-            //CooldownManager.ResetCooldowns();
             timerActive = false;
             queuedModifiers.Clear();
             stopAllModifiers = false;
             invalidateScore = false;
             activeModifiers.Clear();
+            Hooks.updateChainColor = false;
         }      
+
+        public static IEnumerator NukeReset(bool _nukeActive)
+        {
+            nukeActive = _nukeActive;
+            stopAllModifiers = true;
+            ModStatusHandler.RemoveAllDisplays();
+            yield return new WaitForSecondsRealtime(1.5f);           
+            for (int i = activeModifiers.Count - 1; i > -1; i--)
+            {
+                if (activeModifiers[i].type == ModifierType.Nuke) continue;
+                activeModifiers[i].Deactivate();
+            }           
+            timerActive = false;
+            queuedModifiers.Clear();
+            stopAllModifiers = false;
+            activeModifiers.Clear();
+            
+        }
     }
 }

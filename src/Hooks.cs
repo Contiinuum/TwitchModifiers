@@ -9,6 +9,9 @@ namespace AudicaModding
 {
     internal static class Hooks
     {
+        public static bool hideTeles = false;
+        public static bool updateChainColor = false;
+
         [HarmonyPatch(typeof(TwitchChatStream), "write_chat_msg", new Type[] { typeof(string) })]
         private static class PatchWriteChatMsg
         {
@@ -21,7 +24,7 @@ namespace AudicaModding
                         if (msg.Contains("tmi.twitch.tv PRIVMSG "))
                         {
                             TwitchHandler.ParsedTwitchMessage parsedMsg = TwitchHandler.ParseTwitchMessage(msg);
-                            TwitchHandler.ParseCommand(parsedMsg.message, parsedMsg.displayName);
+                            TwitchHandler.ParseCommand(parsedMsg.message, parsedMsg.displayName, parsedMsg.color);
                         }
                     }
                 }
@@ -64,59 +67,87 @@ namespace AudicaModding
                             return true;
                         }
                     }
-                    else if(mod.type == ModifierType.Wobble)
+                    else if (mod.type == ModifierType.Wobble)
                     {
                         __result = ScoreKeeper.ScoreValidity.Valid;
                         __instance.mHasInvalidatedScore = false;
                         return true;
                     }
                 }
-
-
                 return false;
             }
         }
-        /*
-        [HarmonyPatch(typeof(Target), "InitFromSpawner", new Type[] { typeof(TargetSpawner.SpawnInfo), typeof(SongCues.Cue) })]
-        private static class OnCreated
+
+        [HarmonyPatch(typeof(Telegraph), "Init", new Type[] { typeof(SongCues.Cue), typeof(float) })]
+        private static class PatchInit
         {
-            private static void Postfix(Target __instance, TargetSpawner.SpawnInfo info, SongCues.Cue cue)
+            private static void Postfix(Telegraph __instance, SongCues.Cue cue, float animationSpeed)
             {
-                if (!ModifierManager.colorSwapActive && !ModifierManager.randomColorsActive) return;
-                if (cue.behavior != Target.TargetBehavior.Chain) return;          
-                
+                if (!hideTeles) return;
+                if (cue.behavior == Target.TargetBehavior.Melee || cue.behavior == Target.TargetBehavior.Dodge) return;
+                __instance.circleMesh.enabled = false;
+                __instance.cloud.enabled = false;
+            }
+        }
+
+        [HarmonyPatch(typeof(Target), "InitFromSpawner", new Type[] { typeof(TargetSpawner.SpawnInfo), typeof(SongCues.Cue) })]
+        private static class PatchTargetInit
+        {
+            private static void Prefix(Target __instance, TargetSpawner.SpawnInfo info, SongCues.Cue cue)
+            {
+                if (!updateChainColor) return;
+                if (cue.behavior != Target.TargetBehavior.Chain) return;
+                if (cue.handType == Target.TargetHandType.Left)
+                {
+                    __instance.chainLine.startColor = PlayerPreferences.I.GunColorLeft.Get() / 2;
+                    __instance.chainLine.endColor = PlayerPreferences.I.GunColorLeft.Get() / 2;
+                }
+                else
+                {
+                    __instance.chainLine.startColor = PlayerPreferences.I.GunColorRight.Get() / 2;
+                    __instance.chainLine.endColor = PlayerPreferences.I.GunColorRight.Get() / 2;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(AudioDriver), "StartPlaying", new Type[0])]
+        private static class ScoreUpdater
+        {
+            private static void Postfix(AudioDriver __instance)
+            {
+                ModStatusHandler.ShowEnabledString();
+            }
+        }
+
+        /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
+        private static class PatchSetSpeed
+        {
+            private static void PostFix(AudioDriver __instance, float speed)
+            {
+                ScoreKeeper.I.GetScoreValidity();
             }
         }
         */
-                /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
-                private static class PatchSetSpeed
+        /*
+        [HarmonyPatch(typeof(ScoreKeeper), "InvalidateScore")]
+        private static class PatchGetScoreValidity
+        {
+            private static void Postfix(ScoreKeeper __instance)
+            {
+
+                foreach (Modifier mod in ModifierManager.activeModifiers)
                 {
-                    private static void PostFix(AudioDriver __instance, float speed)
+                    if (mod.type == ModifierType.Speed)
                     {
-                        ScoreKeeper.I.GetScoreValidity();
+                        MelonLogger.Log("invalidated!");
+                        __instance.mHasInvalidatedScore = true;
+                        break;
                     }
                 }
-                */
-                /*
-                [HarmonyPatch(typeof(ScoreKeeper), "InvalidateScore")]
-                private static class PatchGetScoreValidity
-                {
-                    private static void Postfix(ScoreKeeper __instance)
-                    {
-
-                        foreach (Modifier mod in ModifierManager.activeModifiers)
-                        {
-                            if (mod.type == ModifierType.Speed)
-                            {
-                                MelonLogger.Log("invalidated!");
-                                __instance.mHasInvalidatedScore = true;
-                                break;
-                            }
-                        }
-                        //if (__result == ScoreKeeper.ScoreValidity.Valid || __result == ScoreKeeper.ScoreValidity.NoFail) return false;
-                    }
-                }
-                */
-
+                //if (__result == ScoreKeeper.ScoreValidity.Valid || __result == ScoreKeeper.ScoreValidity.NoFail) return false;
             }
+        }
+        */
+
+    }
 }

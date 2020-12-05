@@ -13,7 +13,7 @@ namespace AudicaModding
         private static Dictionary<ModifierType, PopupSlot> activePopups = new Dictionary<ModifierType, PopupSlot>();
         private static List<int> popupSlots = new List<int>();
 
-        public static void RequestPopup(ModifierType type, string text)
+        public static void RequestPopup(ModifierType type, string command, string amount)
         {
             if (!Config.generalParams.showModStatus) return;
             if (activePopups.ContainsKey(type)) return;
@@ -28,17 +28,22 @@ namespace AudicaModding
             for(int i = 0; i < popupSlots.Count; i++)
             {
                 if (popupSlots[i] == -1) continue;
-                activePopups.Add(type, new PopupSlot(popupSlots[i], StatusText(text, popupSlots[i])));
+                activePopups.Add(type, new PopupSlot(popupSlots[i], StatusText(ComposeString(command, amount), popupSlots[i])));
                 popupSlots[i] = -1;
                 break;
             }
         }
 
-        public static void UpdatePopup(ModifierType type, string text)
+        public static void UpdatePopup(ModifierType type, string command, string amount)
         {
             if (!Config.generalParams.showModStatus) return;
             if (!activePopups.ContainsKey(type)) return;
-            activePopups[type].popup.textMesh.text = text;
+            activePopups[type].popup.textMesh.text = ComposeString(command, amount);
+        }
+
+        private static string ComposeString(string command, string amount)
+        {
+            return command + ": " + amount;
         }
 
         public static void RemovePopup(ModifierType type)

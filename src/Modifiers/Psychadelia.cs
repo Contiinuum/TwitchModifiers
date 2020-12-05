@@ -32,7 +32,7 @@ namespace AudicaModding
             base.Activate();
             if (amount > psychadeliaParams.maxPsychadeliaSpeed) amount = psychadeliaParams.maxPsychadeliaSpeed;
             else if (amount < psychadeliaParams.minPsychadeliaSpeed) amount = psychadeliaParams.minPsychadeliaSpeed;
-            MelonCoroutines.Start(ActiveTimer(defaultParams.duration));
+            MelonCoroutines.Start(ActiveTimer());
 
             MelonCoroutines.Start(DoPsychedelia());
         }

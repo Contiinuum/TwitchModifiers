@@ -21,6 +21,11 @@ namespace AudicaModding
         Scale,
         RandomColors,
         ColorSwap,
-        Wooble
+        Wooble,
+        StreamMode,
+        HiddenTelegraphs,
+        UnifyColors,
+        TimingAttack,
+        Nuke
     }
 }

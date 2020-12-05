@@ -14,7 +14,7 @@ namespace AudicaModding
         {
             MelonLogger.Log(type.ToString() + " activated");
             defaultParams.active = true;
-            ModStatusHandler.RequestStatusDisplays(type, type.ToString() + ": " + defaultParams.duration.ToString());          
+            ModStatusHandler.RequestStatusDisplays(type, defaultParams.name,  defaultParams.duration.ToString(), defaultParams.user, defaultParams.color);          
         }
 
         public virtual void Deactivate()
@@ -26,19 +26,26 @@ namespace AudicaModding
             }
             MelonLogger.Log(type.ToString() + " deactivated");
             defaultParams.active = false;
-            //ModifierManager.UnregisterModifier(this);
             ModStatusHandler.RemoveStatusDisplays(type, ModStatusHandler.UpdateType.Ingame);
-            ModStatusHandler.UpdateStatusDisplays(type, type.ToString() + " CD: " + defaultParams.cooldown.ToString(), ModStatusHandler.UpdateType.ScoreOverlay);
+            ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, defaultParams.cooldown.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.ScoreOverlay);         
             MelonCoroutines.Start(CooldownTimer(defaultParams.cooldown));
+            if (ModifierManager.nukeActive)
+            {
+                foreach (Modifier mod in ModifierManager.activeModifiers)
+                {
+                    if (mod.defaultParams.active) return;
+                }
+                ModifierManager.nukeActive = false;
+            }
         }
 
-        protected IEnumerator ActiveTimer(float countdownTimer)
+        protected IEnumerator ActiveTimer()
         {
-            while(countdownTimer > 0)
+            while(defaultParams.duration > 0)
             {
                 if (ModifierManager.stopAllModifiers) yield break;
-                ModStatusHandler.UpdateStatusDisplays(type, type.ToString() + ": " + countdownTimer.ToString(), ModStatusHandler.UpdateType.All);
-                if (!InGameUI.I.pauseScreen.IsPaused()) countdownTimer--;
+                ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, defaultParams.duration.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.All);
+                if (!InGameUI.I.pauseScreen.IsPaused()) defaultParams.duration--;
                 yield return new WaitForSecondsRealtime(1f);
             }
             Deactivate();
@@ -47,16 +54,14 @@ namespace AudicaModding
 
         protected IEnumerator CooldownTimer(float cooldownTimer)
         {
-            while(cooldownTimer > 0)
+            while (cooldownTimer > 0)
             {
-                //remainingCooldown = cooldownTimer;
-                ModStatusHandler.UpdateStatusDisplays(type, type.ToString() + " CD: " + cooldownTimer.ToString(), ModStatusHandler.UpdateType.ScoreOverlay);
+                ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, cooldownTimer.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.ScoreOverlay);
                 if (ModifierManager.stopAllModifiers) yield break;
                 if (!InGameUI.I.pauseScreen.IsPaused()) cooldownTimer--;
                 yield return new WaitForSecondsRealtime(1f);
             }
             ModStatusHandler.RemoveStatusDisplays(type, ModStatusHandler.UpdateType.ScoreOverlay);
-            //CooldownManager.RemoveFromList(this);
             ModifierManager.RemoveActiveModifier(this);
         }
 

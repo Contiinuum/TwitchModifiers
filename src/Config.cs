@@ -10,6 +10,7 @@ namespace AudicaModding
         public static ModifierParams.General generalParams;
         private static bool enableTwitchModifiers;
         private static bool showOnScoreOverlay;
+        private static bool allowScoreDisablingMods;
         private static bool enableCountdown;
         private static float cooldownBetweenModifiers;
         private static int maxActiveModifiers;
@@ -47,6 +48,9 @@ namespace AudicaModding
         public static ModifierParams.Wobble wobbleParams;
         private static string wobbleTitle = "[Header]Wobble";
         private static bool wobbleEnabled;
+        private static bool wombleEnabled;
+        private static bool woobleEnabled;
+        private static bool wroblEnabled;
         private static float wobbleDuration;
         private static float wobbleCooldown;
         private static float wobbleMinSpeed;
@@ -110,12 +114,44 @@ namespace AudicaModding
         private static float colorSwapDuration;
         private static float colorSwapCooldown;
 
+        public static ModifierParams.StreamMode streamModeParams;
+        private static string streamModeTitle = "[Header]Stream Mode";
+        private static bool streamModeEnabled;
+        private static float streamModeDuration;
+        private static float streamModeCooldown;
+        private static int maxStreamSpeed;
+
+        public static ModifierParams.HiddenTelegraphs hiddenTelegraphsParams;
+        private static string hiddenTelegraphsTitle = "[Header]Hidden Telegraphs";
+        private static bool hiddenTelegraphsEnabled;
+        private static float hiddenTelegraphsDuration;
+        private static float hiddenTelegraphsCooldown;
+
+        public static ModifierParams.UnifyColors unifyColorsParams;
+        private static string unifyColorsTitle = "[Header]Unify Colors";
+        private static bool unifyColorsEnabled;
+        private static float unifyColorsDuration;
+        private static float unifyColorsCooldown;
+
+        public static ModifierParams.TimingAttack timingAttackParams;
+        private static string timingAttackTitle = "[Header]Timing Attack";
+        private static bool timingAttackEnabled;
+        private static float timingAttackDuration;
+        private static float timingAttackCooldown;
+
+        public static ModifierParams.Nuke nukeParams;
+        private static string nukeTitle = "[Header]Nuke";
+        private static bool nukeEnabled;
+        private static float nukeDuration;
+        private static float nukeCooldown;
+
 
         public static void RegisterConfig()
         {
             MelonPrefs.RegisterBool(Category, nameof(enableTwitchModifiers), true, "Enables Twitch Modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(showOnScoreOverlay), true, "Shows active modifiers and cooldowns on Score Overlay (requries Score Overlay by octo).");
             MelonPrefs.RegisterBool(Category, nameof(enableCountdown), true, "Enables Countdown before activating a modifier.");
+            MelonPrefs.RegisterBool(Category, nameof(allowScoreDisablingMods), true, "Turning this off disables some modifiers that prevent you from submitting scores to the leaderboards.");
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
             MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
             MelonPrefs.RegisterBool(Category, nameof(showModStatus), true, "Shows time left for on active modifier ingame.");
@@ -146,7 +182,10 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(minesCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
             MelonPrefs.RegisterString(Category, nameof(wobbleTitle), "", wobbleTitle);
-            MelonPrefs.RegisterBool(Category, nameof(wobbleEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterBool(Category, nameof(wobbleEnabled), true, "Enables this modifier and all of it's modes.");
+            MelonPrefs.RegisterBool(Category, nameof(wombleEnabled), true, "Womble is wobble with speed arguments.");
+            MelonPrefs.RegisterBool(Category, nameof(woobleEnabled), true, "A slightly more retarded wobble.");
+            MelonPrefs.RegisterBool(Category, nameof(wroblEnabled), true, "Wobble gone full retard.");
             MelonPrefs.RegisterFloat(Category, nameof(wobbleDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(wobbleCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(wobbleMinSpeed), .5f, "Minimum amount of speed [0.5, 1, 0.1, 0.5]{P}");
@@ -202,6 +241,32 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(colorSwapDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(colorSwapCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
+            MelonPrefs.RegisterString(Category, nameof(streamModeTitle), "", streamModeTitle);
+            MelonPrefs.RegisterBool(Category, nameof(streamModeEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(streamModeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(streamModeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+            MelonPrefs.RegisterInt(Category, nameof(maxStreamSpeed), 16, "Maximum interval (note value).[4, 32, 2, 16]");
+
+            MelonPrefs.RegisterString(Category, nameof(hiddenTelegraphsTitle), "", hiddenTelegraphsTitle);
+            MelonPrefs.RegisterBool(Category, nameof(hiddenTelegraphsEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(hiddenTelegraphsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(hiddenTelegraphsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
+            MelonPrefs.RegisterString(Category, nameof(unifyColorsTitle), "", unifyColorsTitle);
+            MelonPrefs.RegisterBool(Category, nameof(unifyColorsEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(unifyColorsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(unifyColorsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
+            MelonPrefs.RegisterString(Category, nameof(timingAttackTitle), "", timingAttackTitle);
+            MelonPrefs.RegisterBool(Category, nameof(timingAttackEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(timingAttackDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(timingAttackCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
+
+            MelonPrefs.RegisterString(Category, nameof(nukeTitle), "", nukeTitle);
+            MelonPrefs.RegisterBool(Category, nameof(nukeEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(nukeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(nukeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
+
             OnModSettingsApplied();
         }
 
@@ -220,12 +285,12 @@ namespace AudicaModding
 
         private static void AssignValues()
         {
-            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
+            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods ,cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
             speedParams = new ModifierParams.Speed(speedEnabled, speedDuration, speedCooldown, minSpeed, maxSpeed);
             aimParams = new ModifierParams.AimAssist(aimAssistEnabled, aimAssistDuration, aimAssistCooldown, minAimAssist);
             psychadeliaParams = new ModifierParams.Psychedelia(psychedeliaEnabled, psychedeliaDuration, psychedeliaCooldown, minPsychedeliaSpeed, maxPsychedeliaSpeed);
             mineParams = new ModifierParams.Mines(minesEnabled, minesDuration, minesCooldown);
-            wobbleParams = new ModifierParams.Wobble(wobbleEnabled, wobbleDuration, wobbleCooldown, wobbleMinSpeed, wobbleMaxSpeed);
+            wobbleParams = new ModifierParams.Wobble(wobbleEnabled, wombleEnabled, woobleEnabled, wroblEnabled, wobbleDuration, wobbleCooldown, wobbleMinSpeed, wobbleMaxSpeed);
             invisGunsParams = new ModifierParams.InvisGuns(invisibleGunsEnabled, invisibleGunsDuration, invisibleGunsCooldown);
             particlesParams = new ModifierParams.Particles(particlesEnabled, particlesDuration, particlesCooldown, minParticles, maxParticles);
             zOffsetParams = new ModifierParams.ZOffset(zoffsetEnabled, zoffsetDuration, zoffsetCooldown, minZoffset, maxZoffset);
@@ -234,6 +299,11 @@ namespace AudicaModding
             scaleParams = new ModifierParams.Scale(scaleEnabled, scaleDuration, scaleCooldown, minScale, maxScale);
             randomColorParams = new ModifierParams.RandomColors(randomColorsEnabled, randomColorsDuration, randomColorsCooldown);
             colorSwapParams = new ModifierParams.ColorSwap(colorSwapEnabled, colorSwapDuration, colorSwapCooldown);
+            streamModeParams = new ModifierParams.StreamMode(streamModeEnabled, streamModeDuration, streamModeCooldown, maxStreamSpeed);
+            hiddenTelegraphsParams = new ModifierParams.HiddenTelegraphs(hiddenTelegraphsEnabled, hiddenTelegraphsDuration, hiddenTelegraphsCooldown);
+            unifyColorsParams = new ModifierParams.UnifyColors(unifyColorsEnabled, unifyColorsDuration, unifyColorsCooldown);
+            timingAttackParams = new ModifierParams.TimingAttack(timingAttackEnabled, timingAttackDuration, timingAttackCooldown);
+            nukeParams = new ModifierParams.Nuke(nukeEnabled, nukeDuration, nukeCooldown);
         }
     }
 }
