@@ -54,8 +54,7 @@ namespace AudicaModding
         public override void Activate()
         {
             base.Activate();
-            if (!PlayerPreferences.I.NoFail.mVal) MelonCoroutines.Start(ResetNoFail());
-            ModifierManager.invalidateScore = true;
+            MelonCoroutines.Start(ToggleNoFail());
             MelonCoroutines.Start(ActiveTimer());
             ModifyChains(true);
         }

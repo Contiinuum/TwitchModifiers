@@ -65,8 +65,10 @@ namespace AudicaModding
             ModifierManager.RemoveActiveModifier(this);
         }
 
-        protected IEnumerator ResetNoFail()
+        protected IEnumerator ToggleNoFail()
         {
+            if (PlayerPreferences.I.NoFail.mVal) yield break;
+            ModifierManager.invalidateScore = true;
             PlayerPreferences.I.NoFail.mVal = true;
             yield return new WaitForSecondsRealtime(.2f);
             PlayerPreferences.I.NoFail.mVal = false;

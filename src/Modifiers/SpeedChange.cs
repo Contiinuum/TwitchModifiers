@@ -30,8 +30,7 @@ namespace AudicaModding
             base.Activate();
             if (amount > speedParams.maxSpeed) amount = speedParams.maxSpeed;
             else if (amount < speedParams.minSpeed) amount = speedParams.minSpeed;
-            if (amount < 1f) ModifierManager.invalidateScore = true;
-
+            if (amount < 1f) MelonCoroutines.Start(ToggleNoFail());
                
             tempoRampActive = true;
             MelonCoroutines.Start(TempoRamp());
