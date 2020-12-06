@@ -91,7 +91,15 @@ namespace AudicaModding
             string statusColor = state == State.Active ? "<color=\"green\">" : "<color=\"red\">";
             string s = statusColor;
             s += command + "</color> ";
-            s += "<" + color + ">(" + user + ")</color>";
+            if (color.Length > 0)
+            {
+                s += "<" + color + ">(" + user + ")</color>";
+            }
+            else
+            {
+                s += "(" + user + ")";
+            }
+            
             s += statusColor;
             s += state == State.Active ? ": " : " CD: ";
             s += amount;

@@ -78,10 +78,10 @@ namespace AudicaModding
         {
             float lastSpeed = AudioDriver.I.mSpeed;
             float progress = 0;
-            while (defaultParams.active)
+            while ((AudioDriver.I.mSpeed > 1.05f && lastSpeed >= 1f) || (AudioDriver.I.mSpeed < .95f && lastSpeed <= 1f))
             {
                 AudioDriver.I.SetSpeed(Mathf.Lerp(lastSpeed, 1f, progress / 100f));
-                if ((amount < 1f && AudioDriver.I.mSpeed >= 1f) || (amount > 1f && AudioDriver.I.mSpeed <= 1f))
+                if ((AudioDriver.I.mSpeed >= .95f && AudioDriver.I.mSpeed < 1f) || (AudioDriver.I.mSpeed <= 1.05f && AudioDriver.I.mSpeed > 1f))
                 {
                     AudioDriver.I.SetSpeed(1f);
                     base.Deactivate();
@@ -90,14 +90,23 @@ namespace AudicaModding
                 progress++;
                 yield return new WaitForSecondsRealtime(.002f);
             }
+            AudioDriver.I.SetSpeed(1f);
+            base.Deactivate();
+            yield return null;
         }
 
         public override void Deactivate()
         {
             //base.Deactivate();
-            if(mode == Mode.Wobble) GameplayModifiers.I.DeactivateModifier(GameplayModifiers.Modifier.SpeedWobble);
+            if(mode == Mode.Wobble)
+            {
+                GameplayModifiers.I.DeactivateModifier(GameplayModifiers.Modifier.SpeedWobble);
+                AudioDriver.I.SetSpeed(1f);
+                base.Deactivate();
+
+            }
+                
             else MelonCoroutines.Start(DisableWobble());
-            //AudioDriver.I.SetSpeed(1f);
         }
 
         private enum Mode

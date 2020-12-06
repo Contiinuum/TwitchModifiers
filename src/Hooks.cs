@@ -24,7 +24,7 @@ namespace AudicaModding
                         if (msg.Contains("tmi.twitch.tv PRIVMSG "))
                         {
                             TwitchHandler.ParsedTwitchMessage parsedMsg = TwitchHandler.ParseTwitchMessage(msg);
-                            TwitchHandler.ParseCommand(parsedMsg.message, parsedMsg.displayName, parsedMsg.color);
+                            TwitchHandler.ParseCommand(parsedMsg.message, parsedMsg.displayName, parsedMsg.color, parsedMsg.customRewardId);
                         }
                     }
                 }

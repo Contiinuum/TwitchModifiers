@@ -19,17 +19,16 @@ namespace AudicaModding
             public const string Name = "TwitchModifiers";  // Name of the Mod.  (MUST BE SET)
             public const string Author = "Continuum"; // Author of the Mod.  (Set as null if none)
             public const string Company = null; // Company that made the Mod.  (Set as null if none)
-            public const string Version = "2.0.0"; // Version of the Mod.  (MUST BE SET)
-            public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none)
+            public const string Version = "2.0.2"; // Version of the Mod.  (MUST BE SET)
+            public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none) 
         }
-
+        
         public override void OnApplicationStart()
         {
             HarmonyInstance instance = HarmonyInstance.Create("TwitchModifiers");
             Config.RegisterConfig();
             //ScoreOverlayIntegration.LookForScoreOverlay();
             Integrations.LookForIntegrations();
-
         }
 
         public override void OnModSettingsApplied()
@@ -52,22 +51,26 @@ namespace AudicaModding
                     {
                         return;
                     }
-                    else if ((type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
+                    if (type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
                     {
                         return;
                     }
-                    else if (type == ModifierType.UnifyColors && (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap) || (type == ModifierType.RandomColors || type == ModifierType.ColorSwap) && activeMod.type == ModifierType.UnifyColors)
+                    if (activeMod.defaultParams.active)
                     {
-                        return;
+                        if ((type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
+                        {
+                            return;
+                        }
+                        else if (type == ModifierType.UnifyColors && (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap) || (type == ModifierType.RandomColors || type == ModifierType.ColorSwap) && activeMod.type == ModifierType.UnifyColors)
+                        {
+                            return;
+                        }
+                        else if ((type == ModifierType.ZOffset && activeMod.type == ModifierType.Scale) || (type == ModifierType.Scale && activeMod.type == ModifierType.ZOffset))
+                        {
+                            return;
+                        }
                     }
-                    else if (type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
-                    {
-                        return;
-                    }
-                    else if((type == ModifierType.ZOffset && activeMod.type == ModifierType.Scale) || (type == ModifierType.Scale && activeMod.type == ModifierType.ZOffset))
-                    {
-                        return;
-                    }
+                   
                 }
             }
             CreateModifier(type, amount, user, color);
@@ -152,7 +155,6 @@ namespace AudicaModding
 
         public override void OnUpdate()
         {
-            //if (Input.GetKeyDown(KeyCode.T)) DebugCommand("!nuke");
             /*
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
@@ -175,7 +177,7 @@ namespace AudicaModding
 
         private void DebugCommand(string command)
         {
-            TwitchHandler.ParseCommand(command, "conti", "color=#FFFFFF");
+            TwitchHandler.ParseCommand(command, "conti", "color=#FFFFFF", "yaddayaddaa");
         }
     }
 }
