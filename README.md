@@ -9,6 +9,9 @@
    * speed below 100  
    * stream mode
 
+# Channel Points
+For modifiers to work, you need to create a custom channel points reward. Name it whatever you want, just make sure the reward requires text. In that text, the user is required to type a command listed below.
+
 
 ## Command List and Default Values
 
