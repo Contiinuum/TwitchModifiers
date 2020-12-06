@@ -42,44 +42,12 @@ namespace AudicaModding
         }
 
         public static void RegisterModifier(ModifierType type, float amount, string user, string color)
-        {
-            if (ModifierManager.activeModifiers.Count > 0)
-            {
-                foreach (Modifier activeMod in ModifierManager.activeModifiers)
-                {
-                    if (activeMod.type == type)
-                    {
-                        return;
-                    }
-                    if (type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
-                    {
-                        return;
-                    }
-                    if (activeMod.defaultParams.active)
-                    {
-                        if ((type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
-                        {
-                            return;
-                        }
-                        else if (type == ModifierType.UnifyColors && (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap) || (type == ModifierType.RandomColors || type == ModifierType.ColorSwap) && activeMod.type == ModifierType.UnifyColors)
-                        {
-                            return;
-                        }
-                        else if ((type == ModifierType.ZOffset && activeMod.type == ModifierType.Scale) || (type == ModifierType.Scale && activeMod.type == ModifierType.ZOffset))
-                        {
-                            return;
-                        }
-                    }
-                   
-                }
-            }
+        {          
             CreateModifier(type, amount, user, color);
         }
 
         public static void CreateModifier(ModifierType type, float amount, string user, string color)
         {
-
-
             Modifier mod = null;
             switch (type)
             {
@@ -169,9 +137,9 @@ namespace AudicaModding
             if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!scale 150");
             if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!randomcolors");
             if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
-            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!unhookchains");
+            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!streammode");
             if (Input.GetKeyDown(KeyCode.N)) DebugCommand("!hiddenteles");            
-            if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!streammode");
+            if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!dropnuke");
             */
         }
 

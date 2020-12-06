@@ -27,15 +27,17 @@
             public bool enableTwitchModifiers;
             public bool showOnScoreOverlay;
             public bool countdownEnabled;
+            public bool useChannelPoints;
             public float cooldownBetweenModifiers;
             public int maxActiveModifiers;
             public bool showModStatus;
             public bool allowScoreDisablingMods;
 
-            public General(bool _countdownEnabled, bool _showOnScoreOverlay, bool _allowScoreDisablingMods, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
+            public General(bool _countdownEnabled, bool _showOnScoreOverlay, bool _allowScoreDisablingMods, bool _useChannelPoints, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
             {
                 enableTwitchModifiers = _enableTwitchModifiers;
                 countdownEnabled = _countdownEnabled;
+                useChannelPoints = _useChannelPoints;
                 cooldownBetweenModifiers = _cooldownBetweenModifiers;
                 maxActiveModifiers = _maxActiveModifiers;
                 showModStatus = _showModStatus;

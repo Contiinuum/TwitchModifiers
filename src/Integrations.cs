@@ -39,7 +39,6 @@ namespace AudicaModding
                 {
                     var scoreVersion = new Version(mod.Info.Version);
                     var lastUnsupportedVersion = new Version("0.0.0");
-                    MelonLogger.Log(scoreVersion.ToString());
                     var result = scoreVersion.CompareTo(lastUnsupportedVersion);
                     if (result > 0)
                     {

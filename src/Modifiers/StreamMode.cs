@@ -72,28 +72,35 @@ namespace AudicaModding
             SongCues.Cue[] cues = SongCues.I.mCues.cues;
             if (unhook)
             {
+                bool checkForChain = false;
                 for (int i = 0; i < cues.Length; i++)
                 {
+                    if (cues[i].behavior == Target.TargetBehavior.Chain) continue;
                     if (cues[i].tick < AudioDriver.I.mCachedTick + 1920) continue;
-
-                    if (cues[i].behavior == Target.TargetBehavior.Hold || cues[i].behavior == Target.TargetBehavior.ChainStart)
+                    if (checkForChain)
                     {
+                        List<SongCues.Cue> nodes = queuedChains.Last().Value.nodes;
                         if (queuedChains.ContainsKey(cues[i].tick))
                         {
                             queuedChains.Remove(queuedChains.Last().Key);
                             continue;
                         }
-                        if (cues[i].behavior != Target.TargetBehavior.ChainStart) continue;
+                        if (nodes[0].tick >= cues[i].tick && nodes[nodes.Count - 1].tick <= cues[i].tick)
+                        {
+                            queuedChains.Remove(queuedChains.Last().Key);
+                            continue;
+                        }
+                        checkForChain = false;
                     }
-                    else
-                    {
-                        continue;
-                    }                 
+                   
+                    if (cues[i].behavior != Target.TargetBehavior.ChainStart) continue;
+                
 
                     Target.TargetHandType handType = cues[i].handType;
                     List<SongCues.Cue> chain = new List<SongCues.Cue>();
                     RecursiveAdd(cues[i], chain);
                     queuedChains.Add(cues[i].tick, new Chain(handType, chain));
+                    checkForChain = true;
                 
                     
                 }

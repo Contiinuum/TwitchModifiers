@@ -116,6 +116,8 @@ namespace AudicaModding
             private static void Postfix(AudioDriver __instance)
             {
                 ModStatusHandler.ShowEnabledString();
+                MelonCoroutines.Start(ModifierManager.ProcessQueueDelayed());
+                
             }
         }
 

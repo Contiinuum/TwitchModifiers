@@ -27,7 +27,8 @@ namespace AudicaModding
             MelonLogger.Log(type.ToString() + " deactivated");
             defaultParams.active = false;
             ModStatusHandler.RemoveStatusDisplays(type, ModStatusHandler.UpdateType.Ingame);
-            ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, defaultParams.cooldown.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.ScoreOverlay);         
+            ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, defaultParams.cooldown.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.ScoreOverlay);
+            ModifierManager.ProcessQueue();
             MelonCoroutines.Start(CooldownTimer(defaultParams.cooldown));
             if (ModifierManager.nukeActive)
             {

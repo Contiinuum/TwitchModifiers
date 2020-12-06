@@ -12,6 +12,7 @@ namespace AudicaModding
         private static bool showOnScoreOverlay;
         private static bool allowScoreDisablingMods;
         private static bool enableCountdown;
+        private static bool useChannelPoints;
         private static float cooldownBetweenModifiers;
         private static int maxActiveModifiers;
         private static bool showModStatus;
@@ -151,6 +152,7 @@ namespace AudicaModding
             MelonPrefs.RegisterBool(Category, nameof(enableTwitchModifiers), true, "Enables Twitch Modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(showOnScoreOverlay), true, "Shows active modifiers and cooldowns on Score Overlay (requries Score Overlay by octo).");
             MelonPrefs.RegisterBool(Category, nameof(enableCountdown), true, "Enables Countdown before activating a modifier.");
+            MelonPrefs.RegisterBool(Category, nameof(useChannelPoints), true, "Requires viewers to redeem channel points to use modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(allowScoreDisablingMods), true, "Turning this off disables some modifiers that prevent you from submitting scores to the leaderboards.");
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
             MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
@@ -285,7 +287,7 @@ namespace AudicaModding
 
         private static void AssignValues()
         {
-            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods ,cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
+            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods , useChannelPoints, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
             speedParams = new ModifierParams.Speed(speedEnabled, speedDuration, speedCooldown, minSpeed, maxSpeed);
             aimParams = new ModifierParams.AimAssist(aimAssistEnabled, aimAssistDuration, aimAssistCooldown, minAimAssist);
             psychadeliaParams = new ModifierParams.Psychedelia(psychedeliaEnabled, psychedeliaDuration, psychedeliaCooldown, minPsychedeliaSpeed, maxPsychedeliaSpeed);

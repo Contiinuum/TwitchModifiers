@@ -105,8 +105,8 @@ namespace AudicaModding
 
         public static void ParseCommand(string msg, string user, string color, string customRewardId)
         {
-            if (!Config.generalParams.enableTwitchModifiers) return;
-            if (customRewardId.Length == 0)
+            if (!Config.generalParams.enableTwitchModifiers || ModifierManager.nukeActive) return;
+            if (customRewardId.Length == 0 && Config.generalParams.useChannelPoints)
             {
                 MelonLogger.Log("No channel points redeemed.");
                 return;

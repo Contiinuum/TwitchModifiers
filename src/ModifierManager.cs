@@ -21,7 +21,7 @@ namespace AudicaModding
         public static bool colorSwapActive = false;
 
         public static bool nukeActive = false;
-        
+        public static bool queueCheckInProgress = false;
 
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
 
@@ -31,23 +31,57 @@ namespace AudicaModding
 
         public static void AddModifierToQueue(Modifier modifier)
         {
-            if (!CanAddModifiers(modifier)) return;
-
+            MelonLogger.Log(modifier.defaultParams.name + " added to queue");
             queuedModifiers.Add(modifier);
-            activeModifiers.Add(modifier);
-            ProcessQueue();             
+            ProcessQueue();          
         }
 
-        private static void ProcessQueue()
+        public static IEnumerator ProcessQueueDelayed()
         {
-            if (queuedModifiers.Count == 0 || timerActive) return;
+            
+            yield return new WaitForSecondsRealtime(5f);
+            ProcessQueue();
+            
+        }
+
+        public static void ProcessQueue()
+        {
+            if (queuedModifiers.Count == 0) return;
+            if (queueCheckInProgress) return;
+            queueCheckInProgress = true;
+            Modifier add = null;
+            foreach(Modifier mod in queuedModifiers)
+            {
+                if (!CanAddModifier(mod))
+                {
+                    //queueCheckInProgress = false;
+                    continue;
+                }               
+                activeModifiers.Add(mod);
+                add = mod;
+                break;
+            }
+            if(add != null)
+            {
+                queuedModifiers.Remove(add);
+                MelonCoroutines.Start(Countdown(add));
+            }
+            MelonLogger.Log(queuedModifiers.Count.ToString());
+            queueCheckInProgress = false;
+        }
+            
+
+
+        private static void OldPQ()
+        {
+            //if (queuedModifiers.Count == 0 || timerActive) return;
             Modifier mod = queuedModifiers[0];
 
             MelonCoroutines.Start(Countdown(mod));
         }
 
 
-        private static bool CanAddModifiers(Modifier modifier)
+        private static bool CanAddModifier(Modifier mod)
         {
             if (MenuState.sState == MenuState.State.Launched)
             {
@@ -79,11 +113,42 @@ namespace AudicaModding
                     return false;
                 }
 
-                
+                if (timerActive) return false;
+
+                if (activeModifiers.Count > 0)
+                {
+                    foreach (Modifier activeMod in activeModifiers)
+                    {
+                        if (activeMod.type == mod.type)
+                        {
+                            return false;
+                        }
+                        if (mod.type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
+                        {
+                            return false;
+                        }
+                        if (activeMod.defaultParams.active)
+                        {
+                            if ((mod.type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (mod.type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
+                            {
+                                return false;
+                            }
+                            else if (mod.type == ModifierType.UnifyColors && (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap) || (mod.type == ModifierType.RandomColors || mod.type == ModifierType.ColorSwap) && activeMod.type == ModifierType.UnifyColors)
+                            {
+                                return false;
+                            }
+                            else if ((mod.type == ModifierType.ZOffset && activeMod.type == ModifierType.Scale) || (mod.type == ModifierType.Scale && activeMod.type == ModifierType.ZOffset))
+                            {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
                 return true;
             }
 
-            MelonLogger.Log("Currently not in a song.");
+            MelonLogger.Log("Currently not in a song.");           
             return false;
         }
 
@@ -114,9 +179,10 @@ namespace AudicaModding
             }
             
             timerActive = false;
-            queuedModifiers.Remove(modifier);
+            //queuedModifiers.Remove(modifier);
             if (!stopAllModifiers) modifier.Activate();
             yield return new WaitForSeconds(nukeActive ? .1f : Config.generalParams.cooldownBetweenModifiers);
+            //OldPQ();
             ProcessQueue();
             yield return null;
         }
@@ -129,6 +195,7 @@ namespace AudicaModding
         public static void RemoveActiveModifier(Modifier mod)
         {
             activeModifiers.Remove(mod);
+            ModifierManager.ProcessQueue();
         }
 
         public static IEnumerator Reset()
@@ -138,7 +205,7 @@ namespace AudicaModding
             ModStatusHandler.RemoveAllDisplays();
             for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();      
             timerActive = false;
-            queuedModifiers.Clear();
+            //queuedModifiers.Clear();
             stopAllModifiers = false;
             invalidateScore = false;
             activeModifiers.Clear();
@@ -157,7 +224,7 @@ namespace AudicaModding
                 activeModifiers[i].Deactivate();
             }           
             timerActive = false;
-            queuedModifiers.Clear();
+            //queuedModifiers.Clear();
             stopAllModifiers = false;
             activeModifiers.Clear();
             
