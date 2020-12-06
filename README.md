@@ -10,7 +10,7 @@
    * stream mode
 
 # Channel Points
-For modifiers to work, you need to create a custom channel points reward. Name it whatever you want, just make sure the reward requires text. In that text, the user is required to type a command listed below.
+You can choose to require channel points for modifiers. you need to create a custom channel points reward. Name it whatever you want, just make sure the reward requires text. In that text, the user is required to type a command listed below.
 
 
 ## Command List and Default Values
@@ -47,6 +47,7 @@ For modifiers to work, you need to create a custom channel points reward. Name i
  * Enable/disable countdown
  * Enable/disable mod status ingame display
  * Enable/disable mods that prevent you from posting scores to the leaderboard
+ * Enable/disable channel point requirement
  * Change the cooldown before a new modifier can be activated
  * Change the amount of modifiers that can be active at once
  
