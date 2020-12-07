@@ -25,15 +25,24 @@ namespace AudicaModding
 
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
 
-        private static List<Modifier> queuedModifiers = new List<Modifier>();
+        public static List<Modifier> queuedModifiers = new List<Modifier>();
+        private static List<Modifier> queuedNukeModifiers = new List<Modifier>();
         public static List<Modifier> activeModifiers = new List<Modifier>();
 
 
-        public static void AddModifierToQueue(Modifier modifier)
+        public static void AddModifierToQueue(Modifier modifier, bool fromNuke)
         {
             MelonLogger.Log(modifier.defaultParams.name + " added to queue");
-            queuedModifiers.Add(modifier);
-            ProcessQueue();          
+            if(nukeActive && fromNuke)
+            {
+                queuedNukeModifiers.Add(modifier);
+            }
+            else
+            {
+                queuedModifiers.Add(modifier);
+            }
+            
+            if((nukeActive && fromNuke) || !nukeActive) ProcessQueue();
         }
 
         public static IEnumerator ProcessQueueDelayed()
@@ -46,43 +55,41 @@ namespace AudicaModding
 
         public static void ProcessQueue()
         {
-            if (queuedModifiers.Count == 0) return;
-            if (queueCheckInProgress) return;
+            
+            MelonCoroutines.Start(IProcessQueue(nukeActive ? queuedNukeModifiers : queuedModifiers));
+        }
+
+        private static IEnumerator IProcessQueue(List<Modifier> queue)
+        {
+            if (queue.Count == 0) yield break;
+            if (queueCheckInProgress) yield break;
             queueCheckInProgress = true;
             Modifier add = null;
-            foreach(Modifier mod in queuedModifiers)
+            foreach (Modifier mod in queue)
             {
+                if (nukeActive && mod.type == ModifierType.Nuke) continue;
                 if (!CanAddModifier(mod))
                 {
-                    //queueCheckInProgress = false;
                     continue;
-                }               
+                }
                 activeModifiers.Add(mod);
                 add = mod;
                 break;
             }
-            if(add != null)
+            if (add != null)
             {
-                queuedModifiers.Remove(add);
+                queue.Remove(add);
                 MelonCoroutines.Start(Countdown(add));
             }
-            MelonLogger.Log(queuedModifiers.Count.ToString());
+            yield return new WaitForSecondsRealtime(.2f);
             queueCheckInProgress = false;
-        }
-            
-
-
-        private static void OldPQ()
-        {
-            //if (queuedModifiers.Count == 0 || timerActive) return;
-            Modifier mod = queuedModifiers[0];
-
-            MelonCoroutines.Start(Countdown(mod));
         }
 
 
         private static bool CanAddModifier(Modifier mod)
         {
+            if (KataConfig.I.practiceMode) return false;
+
             if (MenuState.sState == MenuState.State.Launched)
             {
                 if (AudioDriver.I is null)
@@ -105,7 +112,7 @@ namespace AudicaModding
                     return false;
                 }
 
-                if (nukeActive) return true;
+                if (nukeActive && mod.type != ModifierType.Nuke) return true;
 
                 if (activeModifiers.Count >= Config.generalParams.maxActiveModifiers)
                 {
@@ -129,6 +136,39 @@ namespace AudicaModding
                         }
                         if (activeMod.defaultParams.active)
                         {
+                            switch (mod.type)
+                            {
+                                case ModifierType.HiddenTelegraphs:
+                                case ModifierType.TimingAttack:
+                                    if (!CanActivate(ModifierType.HiddenTelegraphs, ModifierType.TimingAttack)) return false;
+                                    break;
+                                case ModifierType.Speed:
+                                    if (!CanActivate(ModifierType.Speed, ModifierType.Wobble)) return false;
+                                    if (!CanActivateSpeed(mod)) return false;
+                                    break;
+                                case ModifierType.Scale:
+                                case ModifierType.ZOffset:
+                                    if (!CanActivate(ModifierType.Scale, ModifierType.ZOffset)) return false;
+                                    break;
+                                case ModifierType.Wobble:
+                                    if (!CanActivate(ModifierType.Wobble, ModifierType.Speed)) return false;
+                                    break;
+                                case ModifierType.UnifyColors:
+                                    if (!CanActivateUnifyColors()) return false;
+                                    break;
+                                case ModifierType.RandomColors:
+                                    if (!CanActivate(ModifierType.RandomColors, ModifierType.UnifyColors)) return false;
+                                    break;
+                                case ModifierType.ColorSwap:
+                                    if (!CanActivate(ModifierType.ColorSwap, ModifierType.UnifyColors)) return false;
+                                    break;
+                                case ModifierType.StreamMode:
+                                    if (!CanActivateStreamMode()) return false;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            /*
                             if ((mod.type == ModifierType.Speed && activeMod.type == ModifierType.Wobble) || (mod.type == ModifierType.Wobble && activeMod.type == ModifierType.Speed))
                             {
                                 return false;
@@ -141,15 +181,59 @@ namespace AudicaModding
                             {
                                 return false;
                             }
+                            else if((mod.type == ModifierType.Speed && mod.amount > 1f && activeMod.type == ModifierType.StreamMode) || (mod.type == ModifierType.StreamMode && activeMod.type == ModifierType.Speed && activeMod.amount > 1f))
+                            {
+                                return false;
+                            }
+                            else if((mod.type == ModifierType.TimingAttack && activeMod.type == ModifierType.HiddenTelegraphs) || (mod.type == ModifierType.HiddenTelegraphs && activeMod.type == ModifierType.TimingAttack))
+                            {
+                                CheckAgainstActiveModifier(ModifierType.TimingAttack, ModifierType.HiddenTelegraphs);
+                                return false;
+                            }
+                            */
                         }
 
                     }
                 }
                 return true;
             }
-
             MelonLogger.Log("Currently not in a song.");           
             return false;
+        }
+        private static bool CanActivateUnifyColors()
+        {
+            foreach (Modifier activeMod in activeModifiers)
+            {
+                if (activeMod.type == ModifierType.RandomColors || activeMod.type == ModifierType.ColorSwap || activeMod.type == ModifierType.UnifyColors) return false;
+            }
+            return true;
+        }
+
+        private static bool CanActivateSpeed(Modifier speed)
+        {
+            foreach (Modifier activeMod in activeModifiers)
+            {
+                if ((activeMod.type == ModifierType.StreamMode || activeMod.type == speed.type) && speed.amount > 1f) return false;
+            }
+            return true;
+        }
+        private static bool CanActivateStreamMode()
+        {
+            foreach (Modifier activeMod in activeModifiers)
+            {
+                if (activeMod.type == ModifierType.Speed && activeMod.amount > 1f) return false;
+            }
+            return true;
+        }
+
+        private static bool CanActivate(ModifierType modToActivate, ModifierType modToCheckAgainst)
+        {
+
+            foreach(Modifier activeMod in activeModifiers)
+            {
+                if (activeMod.type == modToActivate || activeMod.type == modToCheckAgainst) return false;
+            }
+            return true;
         }
 
         private static IEnumerator Countdown(Modifier modifier, float countdownTimer = 4)
@@ -179,10 +263,8 @@ namespace AudicaModding
             }
             
             timerActive = false;
-            //queuedModifiers.Remove(modifier);
             if (!stopAllModifiers) modifier.Activate();
             yield return new WaitForSeconds(nukeActive ? .1f : Config.generalParams.cooldownBetweenModifiers);
-            //OldPQ();
             ProcessQueue();
             yield return null;
         }
@@ -195,7 +277,7 @@ namespace AudicaModding
         public static void RemoveActiveModifier(Modifier mod)
         {
             activeModifiers.Remove(mod);
-            ModifierManager.ProcessQueue();
+            ProcessQueue();
         }
 
         public static IEnumerator Reset()
@@ -205,7 +287,6 @@ namespace AudicaModding
             ModStatusHandler.RemoveAllDisplays();
             for (int i = activeModifiers.Count - 1; i > -1; i--) activeModifiers[i].Deactivate();      
             timerActive = false;
-            //queuedModifiers.Clear();
             stopAllModifiers = false;
             invalidateScore = false;
             activeModifiers.Clear();
@@ -224,7 +305,6 @@ namespace AudicaModding
                 activeModifiers[i].Deactivate();
             }           
             timerActive = false;
-            //queuedModifiers.Clear();
             stopAllModifiers = false;
             activeModifiers.Clear();
             

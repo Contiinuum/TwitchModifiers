@@ -20,7 +20,8 @@ namespace AudicaModding
 
             if (popupSlots.Count == 0)
             {
-                for(int i = 0; i < Config.generalParams.maxActiveModifiers; i++)
+                // Config.generalParams.maxActiveModifiers
+                for (int i = 0; i < Enum.GetNames(typeof(ModifierType)).Length; i++)
                 {
                     popupSlots.Add(i);
                 }
@@ -28,7 +29,7 @@ namespace AudicaModding
             for(int i = 0; i < popupSlots.Count; i++)
             {
                 if (popupSlots[i] == -1) continue;
-                activePopups.Add(type, new PopupSlot(popupSlots[i], StatusText(ComposeString(command, amount), popupSlots[i])));
+                activePopups.Add(type, new PopupSlot(popupSlots[i], StatusText(ComposeString(command, amount, popupSlots[i]), popupSlots[i])));
                 popupSlots[i] = -1;
                 break;
             }
@@ -38,12 +39,16 @@ namespace AudicaModding
         {
             if (!Config.generalParams.showModStatus) return;
             if (!activePopups.ContainsKey(type)) return;
-            activePopups[type].popup.textMesh.text = ComposeString(command, amount);
+           
+            activePopups[type].popup.textMesh.text = ComposeString(command, amount, activePopups[type].slot);
         }
 
-        private static string ComposeString(string command, string amount)
+        private static string ComposeString(string command, string amount, int slot)
         {
-            return command + ": " + amount;
+            string colortag = "<color=#57d32e>";
+            if (slot % 2 == 0) colortag = "<color=\"white\">";
+            string txt = colortag + command + ": " + amount + "</color>";
+            return txt;
         }
 
         public static void RemovePopup(ModifierType type)
@@ -73,8 +78,7 @@ namespace AudicaModding
         private static DebugTextPopup StatusText(string text, int slot)
         {
             Vector3 pos = statusTextPosition;
-            pos.y -= .3f * slot;
-
+            pos.y -= .4f * slot;
             return KataConfig.I.CreateDebugText(text, pos, 3f, null, false, 0f);
         }
 

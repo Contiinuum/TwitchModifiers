@@ -19,32 +19,6 @@ namespace AudicaModding
         private static string overlayText;
         private static string enabledText = "TWITCH MODIFIERS ENABLED";
         
-        /*public static void LookForScoreOverlay()
-        {
-            if (MelonHandler.Mods.Any(it => it.Info.SystemType.Name == nameof(ScoreOverlayMod)))
-            {
-                scoreOverlayFound = MelonHandler.Mods.Any(it => it.Info.SystemType.Name == nameof(ScoreOverlayMod));
-                if (scoreOverlayFound)
-                {
-                    foreach (MelonMod mod in MelonHandler.Mods)
-                    {
-                        if (mod.Info.Name == "Score Overlay")
-                        {
-                            var scoreVersion = new Version(mod.Info.Version);
-                            var lastUnsupportedVersion = new Version("2.0.2");
-                            var result = scoreVersion.CompareTo(lastUnsupportedVersion);
-                            if (result > 0)
-                            {
-                                scoreOverlayFound = true;
-                                MelonLoader.MelonLogger.Log("Score Overlay found");
-                            }                             
-                            return;
-                        }
-                    }               
-                }
-            }
-        }
-        */
         public static void RequestOverlayDisplay(ModifierType type, string command, string amount, string user, string color)
         {
             if (!Config.generalParams.showOnScoreOverlay) return;
@@ -89,6 +63,7 @@ namespace AudicaModding
         private static string ComposeString(string command, string amount, string user, string color, State state)
         {
             string statusColor = state == State.Active ? "<color=\"green\">" : "<color=\"red\">";
+            color = color.Replace("\"", string.Empty); 
             string s = statusColor;
             s += command + "</color> ";
             if (color.Length > 0)

@@ -75,6 +75,7 @@ namespace AudicaModding
                 bool checkForChain = false;
                 for (int i = 0; i < cues.Length; i++)
                 {
+                    if (cues[i].behavior == Target.TargetBehavior.Dodge) continue;
                     if (cues[i].behavior == Target.TargetBehavior.Chain) continue;
                     if (cues[i].tick < AudioDriver.I.mCachedTick + 1920) continue;
                     if (checkForChain)
@@ -83,11 +84,13 @@ namespace AudicaModding
                         if (queuedChains.ContainsKey(cues[i].tick))
                         {
                             queuedChains.Remove(queuedChains.Last().Key);
+                            checkForChain = false;
                             continue;
                         }
-                        if (nodes[0].tick >= cues[i].tick && nodes[nodes.Count - 1].tick <= cues[i].tick)
+                        if (nodes[0].tick <= cues[i].tick && nodes[nodes.Count - 1].tick >= cues[i].tick)
                         {
                             queuedChains.Remove(queuedChains.Last().Key);
+                            checkForChain = false;
                             continue;
                         }
                         checkForChain = false;
@@ -136,17 +139,7 @@ namespace AudicaModding
                 }
             }
         }
-        /*
-        private void RecursiveUnhook(SongCues.Cue cue, List<SongCues.Cue> chain, Target.TargetHandType handType)
-        {
-            chain.Add(cue);
-            cue.behavior = Target.TargetBehavior.Standard;
-            cue.handType = handType;
-            if (handType == Target.TargetHandType.Left) handType = Target.TargetHandType.Right;
-            else handType = Target.TargetHandType.Left;
-            if (cue.chainNext != null) RecursiveUnhook(cue.chainNext, chain, handType);
-        }
-        */
+
         private void RepairChains()
         {        
             foreach(KeyValuePair<float, Chain> entry in oldChains)

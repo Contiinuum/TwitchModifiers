@@ -272,7 +272,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Config.cs" />
-    <Compile Include="src\CooldownManager.cs" />
     <Compile Include="src\Modifiers\AimAssistChange.cs" />
     <Compile Include="src\CommandManager.cs" />
     <Compile Include="src\Modifiers\BetterMelees.cs" />

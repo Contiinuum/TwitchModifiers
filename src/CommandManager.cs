@@ -19,7 +19,7 @@ namespace AudicaModding
             public const string Name = "TwitchModifiers";  // Name of the Mod.  (MUST BE SET)
             public const string Author = "Continuum"; // Author of the Mod.  (Set as null if none)
             public const string Company = null; // Company that made the Mod.  (Set as null if none)
-            public const string Version = "2.0.2"; // Version of the Mod.  (MUST BE SET)
+            public const string Version = "2.0.5"; // Version of the Mod.  (MUST BE SET)
             public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none) 
         }
         
@@ -27,7 +27,6 @@ namespace AudicaModding
         {
             HarmonyInstance instance = HarmonyInstance.Create("TwitchModifiers");
             Config.RegisterConfig();
-            //ScoreOverlayIntegration.LookForScoreOverlay();
             Integrations.LookForIntegrations();
         }
 
@@ -43,10 +42,10 @@ namespace AudicaModding
 
         public static void RegisterModifier(ModifierType type, float amount, string user, string color)
         {          
-            CreateModifier(type, amount, user, color);
+            CreateModifier(type, amount, user, color, false);
         }
 
-        public static void CreateModifier(ModifierType type, float amount, string user, string color)
+        public static void CreateModifier(ModifierType type, float amount, string user, string color, bool fromNuke = true)
         {
             Modifier mod = null;
             switch (type)
@@ -56,8 +55,7 @@ namespace AudicaModding
                     {
                         if (!Config.generalParams.allowScoreDisablingMods && amount < 1f) return;
                         mod = new SpeedChange(type, new ModifierParams.Default("Speed", user, color), Config.speedParams, amount);
-                    }
-                        
+                    }                      
                     break;
                 case ModifierType.AA:
                     if (Config.aimParams.enabled) mod = new AimAssistChange(type, new ModifierParams.Default("AA", user, color), Config.aimParams, amount);
@@ -118,12 +116,12 @@ namespace AudicaModding
                     return;
             }
             if (mod is null) return;
-            ModifierManager.AddModifierToQueue(mod);
+            ModifierManager.AddModifierToQueue(mod, fromNuke);
         }
 
         public override void OnUpdate()
         {
-            /*
+            
             if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
             if (Input.GetKeyDown(KeyCode.D)) DebugCommand("!psy 200");
@@ -140,7 +138,7 @@ namespace AudicaModding
             if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!streammode");
             if (Input.GetKeyDown(KeyCode.N)) DebugCommand("!hiddenteles");            
             if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!dropnuke");
-            */
+            
         }
 
         private void DebugCommand(string command)
