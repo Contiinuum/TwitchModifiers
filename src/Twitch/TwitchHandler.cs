@@ -211,6 +211,14 @@ namespace AudicaModding
                     {
                         CommandManager.RegisterModifier(ModifierType.Nuke, user, color);
                     }
+                    else if(command == "bopmode")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
+                    }
+                    else if(command == "stutterchains")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.StutterChains, amount, user, color);
+                    }
                 }        
             }
         }

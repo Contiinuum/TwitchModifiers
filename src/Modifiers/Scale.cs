@@ -12,7 +12,6 @@ namespace AudicaModding
     public class Scale : Modifier
     {
         public ModifierParams.Scale scaleParams;
-        private Dictionary<float, Vector2> oldOffsets = new Dictionary<float, Vector2>();
         public Scale(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.Scale _scaleParams, float _amount)
         {
             type = _type;
@@ -41,10 +40,11 @@ namespace AudicaModding
         public void ScaleTargets(float scale, bool enable)
         {
             SongCues.Cue[] songCues = SongCues.I.mCues.cues;
-            float newScale = scale * .5f;
-           
+            float newScale = scale * .6f;
+            float currentTick = AudioDriver.I.mCachedTick;
             for (int i = 0; i < songCues.Length; i++)
             {
+                if (songCues[i].tick < currentTick) continue;
                 if (songCues[i].behavior == Target.TargetBehavior.Melee || songCues[i].behavior == Target.TargetBehavior.Dodge || songCues[i].behavior == Target.TargetBehavior.Chain || songCues[i].behavior == Target.TargetBehavior.ChainStart) continue;
                 
                 if (enable)
@@ -69,15 +69,14 @@ namespace AudicaModding
                         {
                             offset.y += newScale * .5f;
                         }
-                    }
-                   
-                    oldOffsets.Add(songCues[i].tick + songCues[i].pitch, songCues[i].gridOffset);
+                    }                 
                     offset.x *= newScale;
                     offset.y *= newScale;
                     songCues[i].gridOffset = offset;
                 }
                 else
                 {
+                    Dictionary<float, Vector2> oldOffsets = ModifierManager.originalOffsets;
                     if (!oldOffsets.ContainsKey(songCues[i].tick + songCues[i].pitch)) continue;
                     songCues[i].gridOffset = oldOffsets[songCues[i].tick + songCues[i].pitch];
                 }

@@ -107,7 +107,8 @@ namespace AudicaModding
             if (!Config.generalParams.showOnScoreOverlay) return;
 
             overlays.Clear();
-            UpdateOverlayString();
+            ScoreOverlayMod.ui.ModifierText.SetText("");
+            //UpdateOverlayString();
             ShowEnabledString();
         }
 

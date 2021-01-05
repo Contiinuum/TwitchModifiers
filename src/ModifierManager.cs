@@ -29,6 +29,12 @@ namespace AudicaModding
         private static List<Modifier> queuedNukeModifiers = new List<Modifier>();
         public static List<Modifier> activeModifiers = new List<Modifier>();
 
+        public static Dictionary<float, Vector2> originalOffsets = new Dictionary<float, Vector2>();
+        public static float originalExposure = .5f;
+        public static float originalRotation;
+        public static float userExposure = .5f;
+        public static float userRotation;
+        public static bool originalArenaValuesSet = false;
 
         public static void AddModifierToQueue(Modifier modifier, bool fromNuke)
         {
@@ -43,6 +49,43 @@ namespace AudicaModding
             }
             
             if((nukeActive && fromNuke) || !nukeActive) ProcessQueue();
+        }
+
+        public static IEnumerator ISetUserArenaValues()
+        {
+            if (!Config.generalParams.enableTwitchModifiers) yield break;
+            if (KataConfig.I.practiceMode) yield break;
+            if (originalArenaValuesSet) yield break;
+            while (EnvironmentLoader.I.IsSwitching())
+            {
+                yield return new WaitForSecondsRealtime(.2f);
+            }
+            originalExposure = RenderSettings.skybox.GetFloat("_Exposure");
+            originalRotation = RenderSettings.skybox.GetFloat("_Rotation");
+            originalArenaValuesSet = true;
+        }
+
+        public static IEnumerator ISetDefaultArenaValues()
+        {
+            if (!Config.generalParams.enableTwitchModifiers) yield break;
+            if (KataConfig.I.practiceMode) yield break;
+            if (originalArenaValuesSet) yield break;
+            while (EnvironmentLoader.I.IsSwitching())
+            {
+                yield return new WaitForSecondsRealtime(.2f);
+            }
+            userExposure = RenderSettings.skybox.GetFloat("_Exposure");
+            userRotation = RenderSettings.skybox.GetFloat("_Rotation");
+            originalArenaValuesSet = true;
+        }
+
+        public static void SetOriginaloffset(SongCues.Cue[] cues)
+        {
+            originalOffsets.Clear();
+            for(int i = 0; i < cues.Length; i++)
+            {
+                originalOffsets.Add(cues[i].tick + cues[i].pitch, cues[i].gridOffset);
+            }
         }
 
         public static IEnumerator ProcessQueueDelayed()
@@ -289,7 +332,9 @@ namespace AudicaModding
             timerActive = false;
             stopAllModifiers = false;
             invalidateScore = false;
+            originalArenaValuesSet = false;
             activeModifiers.Clear();
+            RenderSettings.skybox.SetFloat("_Rotation", userRotation);
             Hooks.updateChainColor = false;
         }      
 

@@ -13,6 +13,7 @@ namespace AudicaModding
     {
         public static bool scoreOverlayFound = false;
         public static bool timingAttackFound = false;
+        public static bool arenaLoaderFound = false;
 
         public static void LookForIntegrations()
         {
@@ -35,7 +36,7 @@ namespace AudicaModding
                         scoreOverlayFound = false;
                     }
                 }                       
-                if (mod.Info.SystemType.Name == nameof(TimingAttackClass))
+                else if (mod.Info.SystemType.Name == nameof(TimingAttackClass))
                 {
                     var scoreVersion = new Version(mod.Info.Version);
                     var lastUnsupportedVersion = new Version("0.0.0");
@@ -49,6 +50,22 @@ namespace AudicaModding
                     {
                         MelonLogger.Log("Timing Attack version not compatible. Update Timing Attack to use it with Twitch Modifiers.");
                         timingAttackFound = false;
+                    }
+                }
+                else if (mod.Assembly.GetName().Name == "ArenaLoader")
+                {
+                    var scoreVersion = new Version(mod.Info.Version);
+                    var lastUnsupportedVersion = new Version("0.0.0");
+                    var result = scoreVersion.CompareTo(lastUnsupportedVersion);
+                    if (result > 0)
+                    {
+                        arenaLoaderFound = true;
+                        MelonLogger.Log("Arena Loader found");
+                    }
+                    else
+                    {
+                        MelonLogger.Log("Arena Loader version not compatible. Update Arena Loader to use it with Authorable modifiers.");
+                        arenaLoaderFound = false;
                     }
                 }
             }                  

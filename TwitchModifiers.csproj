@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArenaLoader">
+      <HintPath>D:\Games\Steam\steamapps\common\Audica\Mods\ArenaLoader.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>lib\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -275,6 +278,7 @@
     <Compile Include="src\Modifiers\AimAssistChange.cs" />
     <Compile Include="src\CommandManager.cs" />
     <Compile Include="src\Modifiers\BetterMelees.cs" />
+    <Compile Include="src\Modifiers\BopMode.cs" />
     <Compile Include="src\Modifiers\HiddenTelegraphs.cs" />
     <Compile Include="src\Integrations.cs" />
     <Compile Include="src\Modifiers\ModifierType.cs" />
@@ -294,6 +298,7 @@
     <Compile Include="src\Modifiers\Modifier.cs" />
     <Compile Include="src\Modifiers\ColorSwap.cs" />
     <Compile Include="src\Modifiers\StreamMode.cs" />
+    <Compile Include="src\Modifiers\StutterChains.cs" />
     <Compile Include="src\Modifiers\TimingAttack.cs" />
     <Compile Include="src\Modifiers\UnifyColors.cs" />
     <Compile Include="src\ModStatusHandler.cs" />

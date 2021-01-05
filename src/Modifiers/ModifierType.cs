@@ -25,6 +25,8 @@ namespace AudicaModding
         HiddenTelegraphs,
         UnifyColors,
         TimingAttack,
-        Nuke
+        Nuke,
+        StutterChains,
+        BopMode
     }
 }

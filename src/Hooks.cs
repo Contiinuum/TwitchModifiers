@@ -121,6 +121,30 @@ namespace AudicaModding
             }
         }
 
+        [HarmonyPatch(typeof(SongCues), "LoadCues")]
+        private static class PatchLoadCues
+        {
+            private static void Postfix(SongCues __instance)
+            {
+                if (KataConfig.I.practiceMode) return;
+                if (!Config.generalParams.enableTwitchModifiers) return;
+                MelonCoroutines.Start(ModifierManager.ISetUserArenaValues());
+                ModifierManager.SetOriginaloffset(__instance.mCues.cues);
+                //AuthorableModifiers.LoadModifierCues();
+            }
+        }
+
+        [HarmonyPatch(typeof(EnvironmentLoader), "SwitchEnvironment")]
+        private static class PatchSwitchEnvironment
+        {
+            private static void Postfix(EnvironmentLoader __instance)
+            {
+                if (!Config.generalParams.enableTwitchModifiers) return;
+                if (MenuState.sState == MenuState.State.SettingsPage)
+                    MelonCoroutines.Start(ModifierManager.ISetDefaultArenaValues());
+            }
+        }
+
         /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
         private static class PatchSetSpeed
         {

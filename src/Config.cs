@@ -146,13 +146,27 @@ namespace AudicaModding
         private static float nukeDuration;
         private static float nukeCooldown;
 
+        public static ModifierParams.StutterChains stutterChainParams;
+        private static string stutterChainTitle = "[Header]Stutter Chains";
+        private static bool stutterChainsEnabled;
+        private static float stutterChainsDuration;
+        private static float stutterChainsCooldown;
+        private static float stutterChainsMin;
+        private static float stutterChainsMax;
+
+        public static ModifierParams.BopMode bopModeParams;
+        private static string bopModeTitle = "[Header]Bop Mode";
+        private static bool bopModeEnabled;
+        private static float bopModeDuration;
+        private static float bopModeCooldown;
+
 
         public static void RegisterConfig()
         {
             MelonPrefs.RegisterBool(Category, nameof(enableTwitchModifiers), true, "Enables Twitch Modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(showOnScoreOverlay), true, "Shows active modifiers and cooldowns on Score Overlay (requries Score Overlay by octo).");
             MelonPrefs.RegisterBool(Category, nameof(enableCountdown), true, "Enables Countdown before activating a modifier.");
-            MelonPrefs.RegisterBool(Category, nameof(useChannelPoints), true, "Requires viewers to redeem channel points to use modifiers.");
+            MelonPrefs.RegisterBool(Category, nameof(useChannelPoints), false, "Requires viewers to redeem channel points to use modifiers.");
             MelonPrefs.RegisterBool(Category, nameof(allowScoreDisablingMods), true, "Turning this off disables some modifiers that prevent you from submitting scores to the leaderboards.");
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
             MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
@@ -269,6 +283,18 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(nukeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(nukeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
 
+            MelonPrefs.RegisterString(Category, nameof(stutterChainTitle), "", stutterChainTitle);
+            MelonPrefs.RegisterBool(Category, nameof(stutterChainsEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMin), .5f, "Minimum Stutter Rotation.[1, 5, 1, 1]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMax), 3f, "Maximum Stutter Rotation.[6, 10, 1, 10]{P}");
+
+            MelonPrefs.RegisterString(Category, nameof(bopModeTitle), "", bopModeTitle);
+            MelonPrefs.RegisterBool(Category, nameof(bopModeEnabled), true, "Enables this modifier.");
+            MelonPrefs.RegisterFloat(Category, nameof(bopModeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
+            MelonPrefs.RegisterFloat(Category, nameof(bopModeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
+
             OnModSettingsApplied();
         }
 
@@ -306,6 +332,8 @@ namespace AudicaModding
             unifyColorsParams = new ModifierParams.UnifyColors(unifyColorsEnabled, unifyColorsDuration, unifyColorsCooldown);
             timingAttackParams = new ModifierParams.TimingAttack(timingAttackEnabled, timingAttackDuration, timingAttackCooldown);
             nukeParams = new ModifierParams.Nuke(nukeEnabled, nukeDuration, nukeCooldown);
+            stutterChainParams = new ModifierParams.StutterChains(stutterChainsEnabled, stutterChainsDuration, stutterChainsCooldown, stutterChainsMin, stutterChainsMax);
+            bopModeParams = new ModifierParams.BopMode(bopModeEnabled, bopModeDuration, bopModeCooldown);
         }
     }
 }

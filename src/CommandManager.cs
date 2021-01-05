@@ -112,6 +112,12 @@ namespace AudicaModding
                 case ModifierType.Nuke:
                     if (Config.nukeParams.enabled) mod = new Nuke(type, new ModifierParams.Default("Nuke", user, color), Config.nukeParams);
                     break;
+                case ModifierType.StutterChains:
+                    mod = new StutterChains(type, new ModifierParams.Default("Stutter Chains", user, color), Config.stutterChainParams, amount);
+                    break;
+                case ModifierType.BopMode:
+                    mod = new BopMode(type, new ModifierParams.Default("Bop Mode", user, color), Config.bopModeParams);
+                    break;
                 default:
                     return;
             }
@@ -121,24 +127,28 @@ namespace AudicaModding
 
         public override void OnUpdate()
         {
-            
-            if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
-            if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
-            if (Input.GetKeyDown(KeyCode.D)) DebugCommand("!psy 200");
-            if (Input.GetKeyDown(KeyCode.F)) DebugCommand("!mines");
-            if (Input.GetKeyDown(KeyCode.G)) DebugCommand("!invisguns");
-            if (Input.GetKeyDown(KeyCode.H)) DebugCommand("!wobble 150");
-            if (Input.GetKeyDown(KeyCode.J)) DebugCommand("!particles 150");
-            if (Input.GetKeyDown(KeyCode.K)) DebugCommand("!zoffset 150");
-            if (Input.GetKeyDown(KeyCode.L)) DebugCommand("!bettermelees");
-            if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!randomoffset");
-            if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!scale 150");
-            if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!randomcolors");
-            if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
-            if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!streammode");
-            if (Input.GetKeyDown(KeyCode.N)) DebugCommand("!hiddenteles");            
-            if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!dropnuke");
-            
+
+
+            /*if (Input.GetKeyDown(KeyCode.A)) DebugCommand("!speed 150");
+             if (Input.GetKeyDown(KeyCode.S)) DebugCommand("!aa 0");
+             if (Input.GetKeyDown(KeyCode.D)) DebugCommand("!psy 200");
+             if (Input.GetKeyDown(KeyCode.F)) DebugCommand("!mines");
+             if (Input.GetKeyDown(KeyCode.G)) DebugCommand("!invisguns");
+             if (Input.GetKeyDown(KeyCode.H)) DebugCommand("!wobble 150");
+             if (Input.GetKeyDown(KeyCode.J)) DebugCommand("!particles 150");
+             if (Input.GetKeyDown(KeyCode.K)) DebugCommand("!zoffset 150");
+             if (Input.GetKeyDown(KeyCode.L)) DebugCommand("!bettermelees");
+             if (Input.GetKeyDown(KeyCode.Y)) DebugCommand("!randomoffset");
+             if (Input.GetKeyDown(KeyCode.X)) DebugCommand("!scale 150");
+             if (Input.GetKeyDown(KeyCode.C)) DebugCommand("!randomcolors");
+             if (Input.GetKeyDown(KeyCode.V)) DebugCommand("!colorswap");
+             if (Input.GetKeyDown(KeyCode.B)) DebugCommand("!streammode");
+             if (Input.GetKeyDown(KeyCode.N)) DebugCommand("!hiddenteles");            
+             if (Input.GetKeyDown(KeyCode.M)) DebugCommand("!dropnuke");
+             if (Input.GetKeyDown(KeyCode.O)) DebugCommand("!bopmode");
+             if (Input.GetKeyDown(KeyCode.P)) DebugCommand("!stutterchains");
+             */
+
         }
 
         private void DebugCommand(string command)

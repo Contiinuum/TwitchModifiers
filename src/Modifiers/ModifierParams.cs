@@ -346,5 +346,37 @@
                 enabled = _enabled;
             }
         }
+
+        public struct StutterChains
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+            public float minRot;
+            public float maxRot;
+
+            public StutterChains(bool _enabled, float _duration, float _cooldown, float _minRot, float _maxRot)
+            {
+                duration = _duration;
+                cooldown = _cooldown;
+                enabled = _enabled;
+                minRot = _minRot;
+                maxRot = _maxRot;
+            }
+        }
+
+        public struct BopMode
+        {
+            public bool enabled;
+            public float duration;
+            public float cooldown;
+
+            public BopMode(bool _enabled, float _duration, float _cooldown)
+            {
+                duration = _duration;
+                cooldown = _cooldown;
+                enabled = _enabled;
+            }
+        }
     }
 }

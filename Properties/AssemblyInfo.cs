@@ -18,7 +18,7 @@ using AudicaModding;
 [assembly: AssemblyFileVersion(CommandManager.BuildInfo.Version)]
 [assembly: NeutralResourcesLanguage("en")]
 [assembly: MelonInfo(typeof(CommandManager), CommandManager.BuildInfo.Name, CommandManager.BuildInfo.Version, CommandManager.BuildInfo.Author, CommandManager.BuildInfo.DownloadLink)]
-[assembly: MelonOptionalDependencies("ScoreOverlay")]
+[assembly: MelonOptionalDependencies("ScoreOverlay", "TimingAttack")]
 
 // Create and Setup a MelonModGame to mark a Mod as Universal or Compatible with specific Games.
 // If no MelonModGameAttribute is found or any of the Values for any MelonModGame on the Mod is null or empty it will be assumed the Mod is Universal.

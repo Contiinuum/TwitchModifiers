@@ -15,6 +15,9 @@ namespace AudicaModding
         private Color oldColorLeft;
         private Color oldColorRight;
 
+        private Color oldLeftHandColor;
+        private Color oldRightHandColor;
+
         public UnifyColors(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.UnifyColors _unifyColorsParams)
         {
             type = _type;
@@ -46,17 +49,13 @@ namespace AudicaModding
             {
                 oldColorLeft = KataConfig.I.leftHandColor;
                 oldColorRight = KataConfig.I.rightHandColor;
-                float rand = UnityEngine.Random.Range(0f, 1f);
-                if(rand > .5f)
-                {
-                    leftHandColor = KataConfig.I.leftHandColor;
-                    rightHandColor = KataConfig.I.leftHandColor;
-                }
-                else
-                {
-                    leftHandColor = KataConfig.I.rightHandColor;
-                    rightHandColor = KataConfig.I.rightHandColor;
-                }
+
+                float h1 = UnityEngine.Random.Range(0f, 1f);
+                float s = 1f;
+                float v = 1f;
+                leftHandColor = Color.HSVToRGB(h1, s, v);
+                rightHandColor = Color.HSVToRGB(h1, s, v);
+
             }
             else
             {

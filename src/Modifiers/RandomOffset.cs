@@ -12,7 +12,6 @@ namespace AudicaModding
     public class RandomOffset : Modifier
     {
         public ModifierParams.RandomOffset randomOffsetParams;
-        private Dictionary<float, Vector2> oldOffsets = new Dictionary<float, Vector2>();
         public RandomOffset(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.RandomOffset _randomOffsetParams)
         {
             type = _type;
@@ -39,18 +38,20 @@ namespace AudicaModding
         {
             SongCues.Cue[] songCues = SongCues.I.mCues.cues;
             Vector2 offset;
+            float currentTick = AudioDriver.I.mCachedTick;
             for (int i = 0; i < songCues.Length; i++)
             {
+                if (songCues[i].tick < currentTick) continue;
                 if (songCues[i].behavior == Target.TargetBehavior.Melee || songCues[i].behavior == Target.TargetBehavior.Dodge || songCues[i].behavior == Target.TargetBehavior.Chain ||songCues[i].behavior == Target.TargetBehavior.ChainStart) continue;
 
                 if (enable)
                 {
-                    oldOffsets.Add(songCues[i].tick + songCues[i].pitch, songCues[i].gridOffset);
                     offset = new Vector2(UnityEngine.Random.Range(randomOffsetParams.minOffsetX, randomOffsetParams.maxOffsetX), UnityEngine.Random.Range(randomOffsetParams.minOffsetY, randomOffsetParams.maxOffsetY));
                     songCues[i].gridOffset = offset;
                 }
                 else
                 {
+                    Dictionary<float, Vector2> oldOffsets = ModifierManager.originalOffsets;
                     if (!oldOffsets.ContainsKey(songCues[i].tick + songCues[i].pitch)) continue;
                     songCues[i].gridOffset = oldOffsets[songCues[i].tick + songCues[i].pitch];
                 }
