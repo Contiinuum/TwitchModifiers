@@ -40,19 +40,19 @@ namespace AudicaModding
                 float offset = cues.First().tick % 480;
                 int mod = (int)(AudioDriver.I.mCachedTick) % 960;               
                 float tick = AudioDriver.I.mCachedTick - mod + offset;
-                if(mod >= 840 - offset && mod <= 960 - offset)
+                if(mod >= 900 - offset && mod <= 960 - offset)
                 {
-                   if(cues.Any(cue => cue.tick == (int)tick))
-                   {
-                        currentExp = Mathf.Lerp(0f, ModifierManager.originalExposure, (mod - 840f + offset) / 120f);
-                        ChangeExposure(currentExp);
-                   }                 
-                }
-                else if(mod >= 360 - offset&& mod <= 480 - offset)
-                {
-                    if (SongCues.I.mCues.cues.Any(cue => cue.tick == tick))
+                    if(cues.Any(cue => cue.tick == tick))
                     {
-                        currentExp = Mathf.Lerp(ModifierManager.originalExposure, 0f, (mod - 360f + offset) / 120f);
+                        currentExp = Mathf.Lerp(ModifierManager.originalExposure, 0f, (mod - 900f + offset) / 50f);
+                        ChangeExposure(currentExp);
+                    }                                                     
+                }
+                else if(mod >= 420 - offset&& mod <= 480 - offset)
+                {
+                    if (cues.Any(cue => cue.tick == tick))
+                    {
+                        currentExp = Mathf.Lerp(0f, ModifierManager.originalExposure, (mod - 420f + offset) / 50f);
                         ChangeExposure(currentExp);
                     }
                 }

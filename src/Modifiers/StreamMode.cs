@@ -16,14 +16,13 @@ namespace AudicaModding
         private SortedDictionary<float, Chain> oldChains = new SortedDictionary<float, Chain>();
         private SortedDictionary<float, Chain> queuedChains = new SortedDictionary<float, Chain>();
         private Dictionary<int, int> speedToTicks = new Dictionary<int, int>();
-        public StreamMode(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.StreamMode _streamModeParams, float _amount)
+        public StreamMode(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.StreamMode _streamModeParams)
         {
             type = _type;
             defaultParams = _modifierParams;
             unhookChainsParams = _streamModeParams;
             defaultParams.duration = _streamModeParams.duration;
             defaultParams.cooldown = _streamModeParams.cooldown;
-            amount = _amount;
 
             //speedToTicks.Add(64, 30);
             //speedToTicks.Add(48, 40);

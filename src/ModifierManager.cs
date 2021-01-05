@@ -79,12 +79,12 @@ namespace AudicaModding
             originalArenaValuesSet = true;
         }
 
-        public static void SetOriginaloffset(SongCues.Cue[] cues)
+        public static void SetOriginalOffset(SongCues.Cue[] cues)
         {
             originalOffsets.Clear();
             for(int i = 0; i < cues.Length; i++)
             {
-                originalOffsets.Add(cues[i].tick + cues[i].pitch, cues[i].gridOffset);
+                if(!originalOffsets.ContainsKey(cues[i].tick + cues[i].pitch)) originalOffsets.Add(cues[i].tick + cues[i].pitch, cues[i].gridOffset);
             }
         }
 

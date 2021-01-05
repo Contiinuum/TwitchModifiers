@@ -129,7 +129,7 @@ namespace AudicaModding
                 if (KataConfig.I.practiceMode) return;
                 if (!Config.generalParams.enableTwitchModifiers) return;
                 MelonCoroutines.Start(ModifierManager.ISetUserArenaValues());
-                ModifierManager.SetOriginaloffset(__instance.mCues.cues);
+                ModifierManager.SetOriginalOffset(__instance.mCues.cues);
                 //AuthorableModifiers.LoadModifierCues();
             }
         }

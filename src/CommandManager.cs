@@ -19,7 +19,7 @@ namespace AudicaModding
             public const string Name = "TwitchModifiers";  // Name of the Mod.  (MUST BE SET)
             public const string Author = "Continuum"; // Author of the Mod.  (Set as null if none)
             public const string Company = null; // Company that made the Mod.  (Set as null if none)
-            public const string Version = "2.0.5"; // Version of the Mod.  (MUST BE SET)
+            public const string Version = "2.0.6"; // Version of the Mod.  (MUST BE SET)
             public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none) 
         }
         
@@ -97,7 +97,7 @@ namespace AudicaModding
                     if (Config.streamModeParams.enabled)
                     {
                         if (!Config.generalParams.allowScoreDisablingMods) return;
-                        mod = new StreamMode(type, new ModifierParams.Default("Stream Mode", user, color), Config.streamModeParams, amount);
+                        mod = new StreamMode(type, new ModifierParams.Default("Stream Mode", user, color), Config.streamModeParams);
                     } 
                     break;
                 case ModifierType.HiddenTelegraphs:
@@ -113,10 +113,10 @@ namespace AudicaModding
                     if (Config.nukeParams.enabled) mod = new Nuke(type, new ModifierParams.Default("Nuke", user, color), Config.nukeParams);
                     break;
                 case ModifierType.StutterChains:
-                    mod = new StutterChains(type, new ModifierParams.Default("Stutter Chains", user, color), Config.stutterChainParams, amount);
+                    if (Config.stutterChainParams.enabled) mod = new StutterChains(type, new ModifierParams.Default("Stutter Chains", user, color), Config.stutterChainParams, amount);
                     break;
                 case ModifierType.BopMode:
-                    mod = new BopMode(type, new ModifierParams.Default("Bop Mode", user, color), Config.bopModeParams);
+                    if(Config.bopModeParams.enabled) mod = new BopMode(type, new ModifierParams.Default("Bop Mode", user, color), Config.bopModeParams);
                     break;
                 default:
                     return;

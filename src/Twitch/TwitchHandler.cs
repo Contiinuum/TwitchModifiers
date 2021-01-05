@@ -152,6 +152,10 @@ namespace AudicaModding
                     {
                         CommandManager.RegisterModifier(ModifierType.Scale, amount, user, color);
                     }
+                    else if (command == "stutterchains")
+                    {
+                        CommandManager.RegisterModifier(ModifierType.StutterChains, amount, user, color);
+                    }
                 }
                 else
                 {
@@ -193,7 +197,7 @@ namespace AudicaModding
                     }
                     else if (command == "streammode")
                     {
-                        CommandManager.RegisterModifier(ModifierType.StreamMode, amount, user, color);
+                        CommandManager.RegisterModifier(ModifierType.StreamMode, user, color);
                     }
                     else if (command == "hiddenteles")
                     {
@@ -215,10 +219,7 @@ namespace AudicaModding
                     {
                         CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
                     }
-                    else if(command == "stutterchains")
-                    {
-                        CommandManager.RegisterModifier(ModifierType.StutterChains, amount, user, color);
-                    }
+            
                 }        
             }
         }
