@@ -84,6 +84,9 @@
       <HintPath>lib\Oculus.VR.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ParticleKiller">
+      <HintPath>D:\Games\Steam\steamapps\common\Audica\Mods\ParticleKiller.dll</HintPath>
+    </Reference>
     <Reference Include="Sanford.Multimedia.Midi">
       <HintPath>lib\Sanford.Multimedia.Midi.dll</HintPath>
       <Private>False</Private>

@@ -34,6 +34,7 @@ namespace AudicaModding
         public static float originalRotation;
         public static float userExposure = .5f;
         public static float userRotation;
+        public static bool requireRotationReset = false;
         public static bool originalArenaValuesSet = false;
 
         public static void AddModifierToQueue(Modifier modifier, bool fromNuke)
@@ -334,7 +335,11 @@ namespace AudicaModding
             invalidateScore = false;
             originalArenaValuesSet = false;
             activeModifiers.Clear();
-            RenderSettings.skybox.SetFloat("_Rotation", userRotation);
+            if (requireRotationReset)
+            {
+                RenderSettings.skybox.SetFloat("_Rotation", userRotation);
+                requireRotationReset = false;
+            }            
             Hooks.updateChainColor = false;
         }      
 

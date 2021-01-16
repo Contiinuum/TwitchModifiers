@@ -63,11 +63,11 @@ namespace AudicaModding
 
                         if(Math.Floor((float)(songCues[i].pitch / 12)) < 3)
                         {
-                            offset.y -= newScale * .5f;
+                            offset.y -= newScale * .3f;
                         }
                         else
                         {
-                            offset.y += newScale * .5f;
+                            offset.y += newScale * .3f;
                         }
                     }                 
                     offset.x *= newScale;

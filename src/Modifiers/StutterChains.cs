@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MelonLoader;
 using TimingAttack;
 using UnityEngine;
+using ArenaLoader;
 
 namespace AudicaModding
 {
@@ -31,6 +32,7 @@ namespace AudicaModding
         {
             base.Activate();
             MelonCoroutines.Start(ActiveTimer());
+            ModifierManager.requireRotationReset = true;
             PrepareStutter();
             MelonCoroutines.Start(DoStutter());
         }
@@ -87,7 +89,7 @@ namespace AudicaModding
                         rot = amount * (float)stutter.Value;
                     }
                     
-                    AudicaMod.RotateSkybox(rot);
+                    ArenaLoaderMod.RotateSkybox(rot);
                     stutters.Remove(stutter.Key);
                 }
                 yield return new WaitForSecondsRealtime(.01f);

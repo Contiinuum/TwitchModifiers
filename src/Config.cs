@@ -287,8 +287,8 @@ namespace AudicaModding
             MelonPrefs.RegisterBool(Category, nameof(stutterChainsEnabled), true, "Enables this modifier.");
             MelonPrefs.RegisterFloat(Category, nameof(stutterChainsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPrefs.RegisterFloat(Category, nameof(stutterChainsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
-            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMin), .5f, "Minimum Stutter Rotation.[1, 5, 1, 1]{P}");
-            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMax), 3f, "Maximum Stutter Rotation.[6, 10, 1, 10]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMin), .5f, "Minimum Stutter Rotation.[1, 50, 1, 1]{P}");
+            MelonPrefs.RegisterFloat(Category, nameof(stutterChainsMax), 3f, "Maximum Stutter Rotation.[6, 100, 1, 100]{P}");
 
             MelonPrefs.RegisterString(Category, nameof(bopModeTitle), "", bopModeTitle);
             MelonPrefs.RegisterBool(Category, nameof(bopModeEnabled), true, "Enables this modifier.");

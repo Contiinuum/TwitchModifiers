@@ -14,6 +14,7 @@ namespace AudicaModding
         public static bool scoreOverlayFound = false;
         public static bool timingAttackFound = false;
         public static bool arenaLoaderFound = false;
+        public static bool particleKillerFound = false;
 
         public static void LookForIntegrations()
         {
@@ -32,7 +33,7 @@ namespace AudicaModding
                     }
                     else
                     {
-                        MelonLogger.Log("Score Overlay version not compatible. Update Score Overlay to use it with Twitch Modifiers.");
+                        MelonLogger.LogWarning("Score Overlay version not compatible. Update Score Overlay to use it with Twitch Modifiers.");
                         scoreOverlayFound = false;
                     }
                 }                       
@@ -48,14 +49,14 @@ namespace AudicaModding
                     }
                     else
                     {
-                        MelonLogger.Log("Timing Attack version not compatible. Update Timing Attack to use it with Twitch Modifiers.");
+                        MelonLogger.LogWarning("Timing Attack version not compatible. Update Timing Attack to use it with Twitch Modifiers.");
                         timingAttackFound = false;
                     }
                 }
                 else if (mod.Assembly.GetName().Name == "ArenaLoader")
                 {
                     var scoreVersion = new Version(mod.Info.Version);
-                    var lastUnsupportedVersion = new Version("0.0.0");
+                    var lastUnsupportedVersion = new Version("0.2.1");
                     var result = scoreVersion.CompareTo(lastUnsupportedVersion);
                     if (result > 0)
                     {
@@ -64,8 +65,24 @@ namespace AudicaModding
                     }
                     else
                     {
-                        MelonLogger.Log("Arena Loader version not compatible. Update Arena Loader to use it with Authorable modifiers.");
+                        MelonLogger.LogWarning("Arena Loader version not compatible. Update Arena Loader to use it with Twitch Modifiers.");
                         arenaLoaderFound = false;
+                    }
+                }
+                else if (mod.Assembly.GetName().Name == "ParticleKiller")
+                {
+                    var scoreVersion = new Version(mod.Info.Version);
+                    var lastUnsupportedVersion = new Version("0.0.0");
+                    var result = scoreVersion.CompareTo(lastUnsupportedVersion);
+                    if (result > 0)
+                    {
+                        particleKillerFound = true;
+                        MelonLogger.Log("Particle Killer found");
+                    }
+                    else
+                    {
+                        MelonLogger.LogWarning("Particle Killer version not compatible. Update Particle Killer to use it with Twitch Modifiers.");
+                        particleKillerFound = false;
                     }
                 }
             }                  

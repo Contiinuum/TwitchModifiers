@@ -12,6 +12,8 @@ namespace AudicaModding
     public class Nuke : Modifier
     {
         public ModifierParams.Nuke nukeParams;
+        private string user;
+        private string color;
         public Nuke(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.Nuke _nukeParams)
         {
             type = _type;
@@ -33,8 +35,8 @@ namespace AudicaModding
         public IEnumerator Dropnuke()
         {
             float cooldown = .5f;
-            string user = defaultParams.user;
-            string color = defaultParams.color;
+            user = defaultParams.user;
+            color = defaultParams.color;
             yield return new WaitForSecondsRealtime(1.6f);
             MelonCoroutines.Start(ActiveTimer());
             CommandManager.CreateModifier(ModifierType.AA, .3f, user, color);

@@ -213,9 +213,9 @@ namespace AudicaModding
                     }
                     else if(command == "dropnuke")
                     {
-                        CommandManager.RegisterModifier(ModifierType.Nuke, user, color);
+                        //CommandManager.RegisterModifier(ModifierType.Nuke, user, color);
                     }
-                    else if(command == "bopmode")
+                    else if(command == "lightshow")
                     {
                         CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
                     }

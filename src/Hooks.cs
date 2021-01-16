@@ -145,35 +145,5 @@ namespace AudicaModding
             }
         }
 
-        /*[HarmonyPatch(typeof(AudioDriver), "SetSpeed", new Type[] { typeof(float) })]
-        private static class PatchSetSpeed
-        {
-            private static void PostFix(AudioDriver __instance, float speed)
-            {
-                ScoreKeeper.I.GetScoreValidity();
-            }
-        }
-        */
-        /*
-        [HarmonyPatch(typeof(ScoreKeeper), "InvalidateScore")]
-        private static class PatchGetScoreValidity
-        {
-            private static void Postfix(ScoreKeeper __instance)
-            {
-
-                foreach (Modifier mod in ModifierManager.activeModifiers)
-                {
-                    if (mod.type == ModifierType.Speed)
-                    {
-                        MelonLogger.Log("invalidated!");
-                        __instance.mHasInvalidatedScore = true;
-                        break;
-                    }
-                }
-                //if (__result == ScoreKeeper.ScoreValidity.Valid || __result == ScoreKeeper.ScoreValidity.NoFail) return false;
-            }
-        }
-        */
-
     }
 }
