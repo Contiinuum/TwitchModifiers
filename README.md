@@ -38,6 +38,8 @@ You can choose to require channel points for modifiers. you need to create a cus
  !unifycolors | | Sets left and right hand color to be the same
  !rtxon | | Disables clouds and darts ([Requires Timing Attack, written by Ahriana](https://github.com/Ahriana/AUDICA-Timing-Attack/releases/latest))
  !dropnuke | | Enables a buttload of modifiers at once
+ !bopmode | | Flashes the lights to the beat of the song
+ !stutterchains |1-10 | Rotates the arena on every chain node
  
  **Example usage:** !speed 120
  
