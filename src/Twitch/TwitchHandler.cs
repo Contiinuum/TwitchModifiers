@@ -217,7 +217,7 @@ namespace AudicaModding
                     }
                     else if(command == "lightshow")
                     {
-                        CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
+                        //CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
                     }
             
                 }        
