@@ -16,6 +16,7 @@ namespace AudicaModding
         private static float cooldownBetweenModifiers;
         private static int maxActiveModifiers;
         private static bool showModStatus;
+        private static bool disableForOst;
 
         public static ModifierParams.Speed speedParams;
         private static string speedTilte = "[Header]Speed Change";
@@ -171,6 +172,7 @@ namespace AudicaModding
             MelonPrefs.RegisterFloat(Category, nameof(cooldownBetweenModifiers), 2f, "Cooldown before another modifier can be activated.[0, 20, 1, 2]");
             MelonPrefs.RegisterInt(Category, nameof(maxActiveModifiers), 5, "How many modifiers can be active at once.[1, 10, 1, 5]");
             MelonPrefs.RegisterBool(Category, nameof(showModStatus), true, "Shows time left for on active modifier ingame.");
+            MelonPrefs.RegisterBool(Category, nameof(disableForOst), true, "Disables Twitch Modifiers during OST songs.");
 
             MelonPrefs.RegisterString(Category, nameof(speedTilte), "", speedTilte);
             MelonPrefs.RegisterBool(Category, nameof(speedEnabled), true, "Enables this modifier.");
@@ -313,7 +315,7 @@ namespace AudicaModding
 
         private static void AssignValues()
         {
-            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods , useChannelPoints, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus);
+            generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods , useChannelPoints, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus, disableForOst);
             speedParams = new ModifierParams.Speed(speedEnabled, speedDuration, speedCooldown, minSpeed, maxSpeed);
             aimParams = new ModifierParams.AimAssist(aimAssistEnabled, aimAssistDuration, aimAssistCooldown, minAimAssist);
             psychadeliaParams = new ModifierParams.Psychedelia(psychedeliaEnabled, psychedeliaDuration, psychedeliaCooldown, minPsychedeliaSpeed, maxPsychedeliaSpeed);

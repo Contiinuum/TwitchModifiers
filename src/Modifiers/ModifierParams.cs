@@ -32,8 +32,9 @@
             public int maxActiveModifiers;
             public bool showModStatus;
             public bool allowScoreDisablingMods;
+            public bool disableForOST;
 
-            public General(bool _countdownEnabled, bool _showOnScoreOverlay, bool _allowScoreDisablingMods, bool _useChannelPoints, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus)
+            public General(bool _countdownEnabled, bool _showOnScoreOverlay, bool _allowScoreDisablingMods, bool _useChannelPoints, float _cooldownBetweenModifiers, bool _enableTwitchModifiers, int _maxActiveModifiers, bool _showModStatus, bool _disableForOST)
             {
                 enableTwitchModifiers = _enableTwitchModifiers;
                 countdownEnabled = _countdownEnabled;
@@ -43,6 +44,7 @@
                 showModStatus = _showModStatus;
                 showOnScoreOverlay = _showOnScoreOverlay;
                 allowScoreDisablingMods = _allowScoreDisablingMods;
+                disableForOST = _disableForOST;
             }
         }
 

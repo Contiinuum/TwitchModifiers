@@ -132,7 +132,6 @@ namespace AudicaModding
                     else if (command == "psy")
                     {
                         CommandManager.RegisterModifier(ModifierType.Psychedelia, amount, user, color);
-
                     }
                     else if (command == "womble")
                     {

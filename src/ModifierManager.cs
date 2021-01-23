@@ -109,6 +109,11 @@ namespace AudicaModding
             if (queueCheckInProgress) yield break;
             queueCheckInProgress = true;
             Modifier add = null;
+            while (EnvironmentLoader.I.IsSwitching())
+            {
+                yield return new WaitForSecondsRealtime(1f);
+            }
+            if (Config.generalParams.disableForOST && SongDataHolder.I.songData.IsCoreSong()) yield break;
             foreach (Modifier mod in queue)
             {
                 if (nukeActive && mod.type == ModifierType.Nuke) continue;
