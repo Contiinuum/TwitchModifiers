@@ -18,6 +18,7 @@ namespace AudicaModding
         private static Dictionary<ModifierType, string> overlays = new Dictionary<ModifierType, string>();
         private static string overlayText;
         private static string enabledText = "TWITCH MODIFIERS ENABLED";
+        private static string channelPointText = "\n<color=\"red\">Requires Channel Points</color>";
         
         public static void RequestOverlayDisplay(ModifierType type, string command, string amount, string user, string color)
         {
@@ -46,7 +47,9 @@ namespace AudicaModding
             if (!Config.generalParams.enableTwitchModifiers || !Config.generalParams.showOnScoreOverlay) return;
             if (overlays.Count > 0) return;
             string space = ScoreOverlayMod.ui.ModifierText.text.Length > 0 ? "\n" : "";
-            ScoreOverlayMod.ui.ModifierText.SetText(ScoreOverlayMod.ui.ModifierText.text + space + enabledText);
+            string txt = ScoreOverlayMod.ui.ModifierText.text + space + enabledText;
+            if (Config.generalParams.useChannelPoints) txt += channelPointText;
+            ScoreOverlayMod.ui.ModifierText.SetText(txt);
         }
 
         private static void UpdateOverlayString()
