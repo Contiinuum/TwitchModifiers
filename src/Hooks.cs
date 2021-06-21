@@ -1,4 +1,4 @@
-using Harmony;
+using HarmonyLib;
 using System;
 using TwitchChatter;
 using MelonLoader;
@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace AudicaModding
 {
+#pragma warning disable IDE0051, IDE0060
     internal static class Hooks
     {
         public static bool hideTeles = false;

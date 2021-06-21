@@ -19,20 +19,19 @@ namespace AudicaModding
             public const string Name = "TwitchModifiers";  // Name of the Mod.  (MUST BE SET)
             public const string Author = "Continuum"; // Author of the Mod.  (Set as null if none)
             public const string Company = null; // Company that made the Mod.  (Set as null if none)
-            public const string Version = "2.0.8"; // Version of the Mod.  (MUST BE SET)
+            public const string Version = "2.0.9"; // Version of the Mod.  (MUST BE SET)
             public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none) 
         }
         
         public override void OnApplicationStart()
         {
-            HarmonyInstance instance = HarmonyInstance.Create("TwitchModifiers");
             Config.RegisterConfig();
             Integrations.LookForIntegrations();
         }
 
-        public override void OnModSettingsApplied()
+        public override void OnPreferencesSaved()
         {
-            Config.OnModSettingsApplied();
+            Config.OnPreferencesSaved();
         }
 
         public static void RegisterModifier(ModifierType type, string user, string color)
@@ -106,12 +105,12 @@ namespace AudicaModding
                 case ModifierType.UnifyColors:
                     if (Config.unifyColorsParams.enabled) mod = new UnifyColors(type, new ModifierParams.Default("Unify Colors", user, color), Config.unifyColorsParams);
                     break;
-                case ModifierType.TimingAttack:
+                /*case ModifierType.TimingAttack:
                     if (Config.timingAttackParams.enabled) mod = new TimingAttack(type, new ModifierParams.Default("Timing Attack", user, color), Config.timingAttackParams);
                     break;
                 case ModifierType.Nuke:
                     if (Config.nukeParams.enabled) mod = new Nuke(type, new ModifierParams.Default("Nuke", user, color), Config.nukeParams);
-                    break;
+                    break;*/
                 case ModifierType.StutterChains:
                     if (Config.stutterChainParams.enabled) mod = new StutterChains(type, new ModifierParams.Default("Stutter Chains", user, color), Config.stutterChainParams, amount);
                     break;
@@ -150,9 +149,9 @@ namespace AudicaModding
 
         }
 
-        private void DebugCommand(string command)
+        /*private void DebugCommand(string command)
         {
             TwitchHandler.ParseCommand(command, "conti", "color=#FFFFFF", "yaddayaddaa");
-        }
+        }*/
     }
 }

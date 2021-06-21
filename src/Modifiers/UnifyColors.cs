@@ -15,9 +15,9 @@ namespace AudicaModding
         private Color oldColorLeft;
         private Color oldColorRight;
 
-        private Color oldLeftHandColor;
+        /*private Color oldLeftHandColor;
         private Color oldRightHandColor;
-
+        */
         public UnifyColors(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.UnifyColors _unifyColorsParams)
         {
             type = _type;

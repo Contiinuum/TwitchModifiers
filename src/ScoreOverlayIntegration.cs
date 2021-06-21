@@ -15,10 +15,10 @@ namespace AudicaModding
         //public static bool scoreOverlayFound = false;
         private static bool addNewLine = false;
         private static bool spacingSet = false;
-        private static Dictionary<ModifierType, string> overlays = new Dictionary<ModifierType, string>();
+        private readonly static Dictionary<ModifierType, string> overlays = new Dictionary<ModifierType, string>();
         private static string overlayText;
-        private static string enabledText = "TWITCH MODIFIERS ENABLED";
-        private static string channelPointText = "\n<color=\"red\">Requires Channel Points</color>";
+        private readonly static string enabledText = "TWITCH MODIFIERS ENABLED";
+        private readonly static string channelPointText = "\n<color=\"red\">Requires Channel Points</color>";
         
         public static void RequestOverlayDisplay(ModifierType type, string command, string amount, string user, string color)
         {

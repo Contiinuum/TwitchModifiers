@@ -108,7 +108,7 @@ namespace AudicaModding
             if (!Config.generalParams.enableTwitchModifiers) return;
             if (customRewardId.Length == 0 && Config.generalParams.useChannelPoints)
             {
-                MelonLogger.Log("No channel points redeemed.");
+                MelonLogger.Msg("No channel points redeemed.");
                 return;
             }
             if (msg.Substring(0, 1) == "!")
@@ -225,8 +225,7 @@ namespace AudicaModding
 
         private static float ParseAmount(string msg)
         {
-            int amount = -1;
-            int.TryParse(msg, out amount);
+            int.TryParse(msg, out int amount);
             return amount;
         }
     }

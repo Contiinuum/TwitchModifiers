@@ -13,7 +13,7 @@ namespace AudicaModding
     {
         public ModifierParams.ZOffset zOffsetParams;
         private Direction direction = Direction.Up;
-        private Dictionary<float, float> oldOffsets = new Dictionary<float, float>();
+        private readonly Dictionary<float, float> oldOffsets = new Dictionary<float, float>();
         public ZOffset(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.ZOffset _zOffsetParams, float _amount)
         {
             type = _type;
@@ -51,7 +51,7 @@ namespace AudicaModding
 
                 if(songCues[i].behavior != Target.TargetBehavior.Melee && songCues[i].behavior != Target.TargetBehavior.Dodge)
                 {
-                    //MelonLogger.Log(Mathf.Lerp(0f, zOffset, i / count).ToString());
+                    //MelonLogger.Msg(Mathf.Lerp(0f, zOffset, i / count).ToString());
 
                     if(direction == Direction.Up)
                     {

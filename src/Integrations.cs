@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ScoreOverlay;
-using TimingAttack;
 using MelonLoader;
 
 namespace AudicaModding
@@ -12,7 +11,7 @@ namespace AudicaModding
     public static class Integrations
     {
         public static bool scoreOverlayFound = false;
-        public static bool timingAttackFound = false;
+        //public static bool timingAttackFound = false;
         public static bool arenaLoaderFound = false;
         public static bool particleKillerFound = false;
 
@@ -28,16 +27,16 @@ namespace AudicaModding
                     if (result > 0)
                     {
                         scoreOverlayFound = true;
-                        MelonLogger.Log("Score Overlay found");
+                        MelonLogger.Msg("Score Overlay found");
                                
                     }
                     else
                     {
-                        MelonLogger.LogWarning("Score Overlay version not compatible. Update Score Overlay to use it with Twitch Modifiers.");
+                        MelonLogger.Warning("Score Overlay version not compatible. Update Score Overlay to use it with Twitch Modifiers.");
                         scoreOverlayFound = false;
                     }
                 }                       
-                else if (mod.Info.SystemType.Name == nameof(TimingAttackClass))
+                /*else if (mod.Info.SystemType.Name == nameof(TimingAttackClass))
                 {
                     var scoreVersion = new Version(mod.Info.Version);
                     var lastUnsupportedVersion = new Version("0.0.0");
@@ -45,14 +44,14 @@ namespace AudicaModding
                     if (result > 0)
                     {
                         timingAttackFound = true;
-                        MelonLogger.Log("Timing Attack found");
+                        MelonLogger.Msg("Timing Attack found");
                     }
                     else
                     {
-                        MelonLogger.LogWarning("Timing Attack version not compatible. Update Timing Attack to use it with Twitch Modifiers.");
+                        MelonLogger.Warning("Timing Attack version not compatible. Update Timing Attack to use it with Twitch Modifiers.");
                         timingAttackFound = false;
                     }
-                }
+                }*/
                 else if (mod.Assembly.GetName().Name == "ArenaLoader")
                 {
                     var scoreVersion = new Version(mod.Info.Version);
@@ -61,11 +60,11 @@ namespace AudicaModding
                     if (result > 0)
                     {
                         arenaLoaderFound = true;
-                        MelonLogger.Log("Arena Loader found");
+                        MelonLogger.Msg("Arena Loader found");
                     }
                     else
                     {
-                        MelonLogger.LogWarning("Arena Loader version not compatible. Update Arena Loader to use it with Twitch Modifiers.");
+                        MelonLogger.Warning("Arena Loader version not compatible. Update Arena Loader to use it with Twitch Modifiers.");
                         arenaLoaderFound = false;
                     }
                 }
@@ -77,11 +76,11 @@ namespace AudicaModding
                     if (result > 0)
                     {
                         particleKillerFound = true;
-                        MelonLogger.Log("Particle Killer found");
+                        MelonLogger.Msg("Particle Killer found");
                     }
                     else
                     {
-                        MelonLogger.LogWarning("Particle Killer version not compatible. Update Particle Killer to use it with Twitch Modifiers.");
+                        MelonLogger.Warning("Particle Killer version not compatible. Update Particle Killer to use it with Twitch Modifiers.");
                         particleKillerFound = false;
                     }
                 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MelonLoader;
-using TimingAttack;
 using UnityEngine;
 using ArenaLoader;
 
@@ -14,7 +13,7 @@ namespace AudicaModding
     public class StutterChains : Modifier
     {
         public ModifierParams.StutterChains stutterChainParams;
-        private SortedDictionary<float, int> stutters = new SortedDictionary<float, int>();
+        private readonly SortedDictionary<float, int> stutters = new SortedDictionary<float, int>();
         public StutterChains(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.StutterChains _stutterChainParams, float _amount)
         {
             type = _type;
@@ -49,8 +48,8 @@ namespace AudicaModding
                 List<int> pitches = new List<int>();              
                 RecursiveGetChain(cues[i], chain, pitches);
                 int lastPitch = pitches.Last();
-                
-                int dir = 0;
+
+                int dir;
                 if(cues[i].pitch % 12 > lastPitch % 12)
                 {
                     dir = -1;
@@ -78,11 +77,11 @@ namespace AudicaModding
                 float neutralDir = 1f;
                 if (AudioDriver.I.mCachedTick > stutter.Key)
                 {
-                    float rot = 0f;
+                    float rot;
                     if(stutter.Value == 0f)
                     {
                         rot = amount * neutralDir;
-                        neutralDir *= -1f;
+                        //neutralDir *= -1f;
                     }
                     else
                     {

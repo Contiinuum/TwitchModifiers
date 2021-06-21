@@ -58,8 +58,8 @@ namespace AudicaModding
                 CommandManager.CreateModifier(ModifierType.StreamMode, 0, user, color);
             }
             yield return new WaitForSecondsRealtime(cooldown);
-            if (Integrations.timingAttackFound) CommandManager.CreateModifier(ModifierType.TimingAttack, 0, user, color);
-            else CommandManager.CreateModifier(ModifierType.HiddenTelegraphs, 0, user, color);        
+            //if (Integrations.timingAttackFound) CommandManager.CreateModifier(ModifierType.TimingAttack, 0, user, color);
+            //else CommandManager.CreateModifier(ModifierType.HiddenTelegraphs, 0, user, color);        
             yield return new WaitForSecondsRealtime(cooldown);
             CommandManager.CreateModifier(ModifierType.ZOffset, .1f, user, color);
             yield return null;

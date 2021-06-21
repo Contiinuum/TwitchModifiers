@@ -12,7 +12,7 @@ namespace AudicaModding
 
         public virtual void Activate()
         {
-            MelonLogger.Log(type.ToString() + " activated");
+            MelonLogger.Msg(type.ToString() + " activated");
             defaultParams.active = true;
             ModStatusHandler.RequestStatusDisplays(type, defaultParams.name,  defaultParams.duration.ToString(), defaultParams.user, defaultParams.color);          
         }
@@ -21,10 +21,10 @@ namespace AudicaModding
         {
             if (!defaultParams.active)
             {
-                MelonLogger.Log(type.ToString() + " cancelled");
+                MelonLogger.Msg(type.ToString() + " cancelled");
                 return;
             }
-            MelonLogger.Log(type.ToString() + " deactivated");
+            MelonLogger.Msg(type.ToString() + " deactivated");
             defaultParams.active = false;
             ModStatusHandler.RemoveStatusDisplays(type, ModStatusHandler.UpdateType.Ingame);
             ModStatusHandler.UpdateStatusDisplays(type, defaultParams.name, defaultParams.cooldown.ToString(), defaultParams.user, defaultParams.color, ModStatusHandler.UpdateType.ScoreOverlay);

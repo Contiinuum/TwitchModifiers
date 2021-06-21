@@ -26,7 +26,7 @@ namespace AudicaModding
         public static Vector3 debugTextPosition = new Vector3(0f, 3f, 8f);
 
         public static List<Modifier> queuedModifiers = new List<Modifier>();
-        private static List<Modifier> queuedNukeModifiers = new List<Modifier>();
+        private static readonly List<Modifier> queuedNukeModifiers = new List<Modifier>();
         public static List<Modifier> activeModifiers = new List<Modifier>();
 
         public static Dictionary<float, Vector2> originalOffsets = new Dictionary<float, Vector2>();
@@ -39,7 +39,7 @@ namespace AudicaModding
 
         public static void AddModifierToQueue(Modifier modifier, bool fromNuke)
         {
-            MelonLogger.Log(modifier.defaultParams.name + " added to queue");
+            MelonLogger.Msg(modifier.defaultParams.name + " added to queue");
             if(nukeActive && fromNuke)
             {
                 queuedNukeModifiers.Add(modifier);
@@ -143,7 +143,7 @@ namespace AudicaModding
             {
                 if (AudioDriver.I is null)
                 {
-                    MelonLogger.Log("AudioDriver is null.");
+                    MelonLogger.Msg("AudioDriver is null.");
                     return false;
                 }
                   
@@ -151,13 +151,13 @@ namespace AudicaModding
                 {
                     if(SongCues.I.GetLastCueStartTick() < AudioDriver.I.mCachedTick + 7680)
                     {
-                        MelonLogger.Log("Song is about to end. Mod can't be activated.");
+                        MelonLogger.Msg("Song is about to end. Mod can't be activated.");
                         return false;                                           
                     }
                 }
                 else
                 {
-                    MelonLogger.Log("Song hasn't started yet.");
+                    MelonLogger.Msg("Song hasn't started yet.");
                     return false;
                 }
 
@@ -165,7 +165,7 @@ namespace AudicaModding
 
                 if (activeModifiers.Count >= Config.generalParams.maxActiveModifiers)
                 {
-                    MelonLogger.Log("Max active modifiers reached.");
+                    MelonLogger.Msg("Max active modifiers reached.");
                     return false;
                 }
 
@@ -179,10 +179,10 @@ namespace AudicaModding
                         {
                             return false;
                         }
-                        if (mod.type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
+                        /*if (mod.type == ModifierType.TimingAttack && !Integrations.timingAttackFound)
                         {
                             return false;
-                        }
+                        }*/
                         if (activeMod.defaultParams.active)
                         {
                             switch (mod.type)
@@ -246,7 +246,7 @@ namespace AudicaModding
                 }
                 return true;
             }
-            MelonLogger.Log("Currently not in a song.");           
+            MelonLogger.Msg("Currently not in a song.");           
             return false;
         }
         private static bool CanActivateUnifyColors()

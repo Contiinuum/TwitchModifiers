@@ -10,7 +10,7 @@ namespace AudicaModding
     public class StatusTextManager
     {
         private static Vector3 statusTextPosition = new Vector3(0f, -2f, 8f);
-        private static Dictionary<ModifierType, PopupSlot> activePopups = new Dictionary<ModifierType, PopupSlot>();
+        private readonly static Dictionary<ModifierType, PopupSlot> activePopups = new Dictionary<ModifierType, PopupSlot>();
         private static List<int> popupSlots = new List<int>();
 
         public static void RequestPopup(ModifierType type, string command, string amount)

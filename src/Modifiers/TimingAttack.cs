@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MelonLoader;
-using TimingAttack;
 
 namespace AudicaModding
 {
-    public class TimingAttack : Modifier
+    /*public class TimingAttack : Modifier
     {
         public ModifierParams.TimingAttack timingAttackParams;
         public TimingAttack(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.TimingAttack _timingAttackParams)
@@ -33,5 +32,5 @@ namespace AudicaModding
             base.Deactivate();
             TimingAttackClass.ForceEnable = false;
         }
-    }
+    }*/
 }

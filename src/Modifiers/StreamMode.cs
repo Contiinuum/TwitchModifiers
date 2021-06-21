@@ -14,8 +14,8 @@ namespace AudicaModding
         public ModifierParams.StreamMode unhookChainsParams;
 
         private SortedDictionary<float, Chain> oldChains = new SortedDictionary<float, Chain>();
-        private SortedDictionary<float, Chain> queuedChains = new SortedDictionary<float, Chain>();
-        private Dictionary<int, int> speedToTicks = new Dictionary<int, int>();
+        private readonly SortedDictionary<float, Chain> queuedChains = new SortedDictionary<float, Chain>();
+        private readonly Dictionary<int, int> speedToTicks = new Dictionary<int, int>();
         public StreamMode(ModifierType _type, ModifierParams.Default _modifierParams, ModifierParams.StreamMode _streamModeParams)
         {
             type = _type;
