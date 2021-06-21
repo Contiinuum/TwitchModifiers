@@ -13,9 +13,9 @@
 You can choose to require channel points for modifiers. you need to create a custom channel points reward. Name it whatever you want, just make sure the reward requires text. In that text, the user is required to type a command listed below.
 
 
-## Command List and Default Values
+## Command List and Values
 
- Command  | Default Values | Description 
+ Command  |  Values | Description 
  --- | --- | --- | 
  !speed | 50-150 | Changes song speed 
  !aa | 0-100 | Changes aim assist 
@@ -37,8 +37,6 @@ You can choose to require channel points for modifiers. you need to create a cus
  !hiddenteles | | Hides telegraphs
  !unifycolors | | Sets left and right hand color to be the same
  !rtxon | | Disables clouds and darts ([Requires Timing Attack, written by Ahriana](https://github.com/Ahriana/AUDICA-Timing-Attack/releases/latest))
- !dropnuke | | Enables a buttload of modifiers at once
- !bopmode | | Flashes the lights to the beat of the song
  !stutterchains |1-10 | Rotates the arena on every chain node
  
  **Example usage:** !speed 120
