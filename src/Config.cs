@@ -5,7 +5,7 @@ namespace AudicaModding
 {
     public static class Config
     {
-#pragma warning disable IDE0044
+#pragma warning disable CS0649
 
         public const string Category = "TwitchModifiers";
 
@@ -156,13 +156,13 @@ namespace AudicaModding
         private static float stutterChainsCooldown;
         private static float stutterChainsMin;
         private static float stutterChainsMax;
-
+        /*
         public static ModifierParams.BopMode bopModeParams;
         private static string bopModeTitle = "[Header]Bop Mode";
         private static bool bopModeEnabled;
         private static float bopModeDuration;
         private static float bopModeCooldown;
-
+        */
 
         public static void RegisterConfig()
         {
@@ -176,32 +176,32 @@ namespace AudicaModding
             MelonPreferences.CreateEntry(Category, nameof(showModStatus), true, "Shows time left for on active modifier ingame.");
             MelonPreferences.CreateEntry(Category, nameof(disableForOst), true, "Disables Twitch Modifiers during OST songs.");
 
-            MelonPreferences.CreateEntry(Category, nameof(speedTilte), "", speedTilte);
+            MelonPreferences.CreateEntry(Category, nameof(speedTilte), "", "[Header]Speed");
             MelonPreferences.CreateEntry(Category, nameof(speedEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(speedDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(speedCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minSpeed), .5f, "Minimum amount of speed [0.1, 1, 0.1, 0.5]{P}");
             MelonPreferences.CreateEntry(Category, nameof(maxSpeed), 1.5f, "Maximum amount of speed [1, 3, 0.1, 1.5]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(aimTitle), "", aimTitle);
+            MelonPreferences.CreateEntry(Category, nameof(aimTitle), "", "[Header]Aim Assist");
             MelonPreferences.CreateEntry(Category, nameof(aimAssistEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(aimAssistDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(aimAssistCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minAimAssist), 0f, "Minimum amount of Aim Assist [0, 1, 0.1, 0]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(psyTitle), "", psyTitle);
+            MelonPreferences.CreateEntry(Category, nameof(psyTitle), "", "[Header]Psychedelia");
             MelonPreferences.CreateEntry(Category, nameof(psychedeliaEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(psychedeliaDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(psychedeliaCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minPsychedeliaSpeed), 1f, "Minimum amount of speed [0.1, 1, 0.1, 0.5]{P}");
             MelonPreferences.CreateEntry(Category, nameof(maxPsychedeliaSpeed), 10f, "Maximum amount of speed [1, 30, 1, 10]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(minesTitle), "", minesTitle);
+            MelonPreferences.CreateEntry(Category, nameof(minesTitle), "", "[Header]Mines");
             MelonPreferences.CreateEntry(Category, nameof(minesEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(minesDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minesCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(wobbleTitle), "", wobbleTitle);
+            MelonPreferences.CreateEntry(Category, nameof(wobbleTitle), "", "[Header]Wobble");
             MelonPreferences.CreateEntry(Category, nameof(wobbleEnabled), true, "Enables this modifier and all of it's modes.");
             MelonPreferences.CreateEntry(Category, nameof(wombleEnabled), true, "Womble is wobble with speed arguments.");
             MelonPreferences.CreateEntry(Category, nameof(woobleEnabled), true, "A slightly more retarded wobble.");
@@ -211,31 +211,31 @@ namespace AudicaModding
             MelonPreferences.CreateEntry(Category, nameof(wobbleMinSpeed), .5f, "Minimum amount of speed [0.5, 1, 0.1, 0.5]{P}");
             MelonPreferences.CreateEntry(Category, nameof(wobbleMaxSpeed), 1.5f, "Maximum amount of speed [1, 2, 1, 1.5]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(invisGunsTitle), "", invisGunsTitle);
+            MelonPreferences.CreateEntry(Category, nameof(invisGunsTitle), "", "[Header]Invisible Guns");
             MelonPreferences.CreateEntry(Category, nameof(invisibleGunsEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(invisibleGunsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(invisibleGunsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(particlesTitle), "", particlesTitle);
+            MelonPreferences.CreateEntry(Category, nameof(particlesTitle), "", "[Header]Particles");
             MelonPreferences.CreateEntry(Category, nameof(particlesEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(particlesDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(particlesCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minParticles), 0f, "Minimum amount of particles [0, 1, 0.1, 0]{P}");
             MelonPreferences.CreateEntry(Category, nameof(maxParticles), 10f, "Maximum amount of particles [1, 50, 1, 10]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(zOffsetTitle), "", zOffsetTitle);
+            MelonPreferences.CreateEntry(Category, nameof(zOffsetTitle), "", "[Header]zOffset");
             MelonPreferences.CreateEntry(Category, nameof(zoffsetEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(zoffsetDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(zoffsetCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minZoffset), -.5f, "Minimum amount of zOffset [-0.5, 0, 0.1, -0.5]");
             MelonPreferences.CreateEntry(Category, nameof(maxZoffset), 3f, "Maximum amount of zOffset [0, 5, 0.1, 3]");
 
-            MelonPreferences.CreateEntry(Category, nameof(betterMeleesTitle), "", betterMeleesTitle);
+            MelonPreferences.CreateEntry(Category, nameof(betterMeleesTitle), "", "[Header]Better Melees");
             MelonPreferences.CreateEntry(Category, nameof(betterMeleesEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(betterMeleesDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(betterMeleesCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(randomoffsetTitle), "", randomoffsetTitle);
+            MelonPreferences.CreateEntry(Category, nameof(randomoffsetTitle), "", "[Header]Random Offset");
             MelonPreferences.CreateEntry(Category, nameof(randomOffsetEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(randomOffsetDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(randomOffsetCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
@@ -244,35 +244,35 @@ namespace AudicaModding
             MelonPreferences.CreateEntry(Category, nameof(minRandomOffsetY), -1.5f, "Minimum offset on Y-Axis.[-2.5, 0, 0.1, -1.5]{P}");
             MelonPreferences.CreateEntry(Category, nameof(maxRandomOffsetY), 1.5f, "Maximum offset on Y-Axis.[0, 2.5, 0.1, 1.5]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(scaleTitle), "", scaleTitle);
+            MelonPreferences.CreateEntry(Category, nameof(scaleTitle), "", "[Header]Scale");
             MelonPreferences.CreateEntry(Category, nameof(scaleEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(scaleDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(scaleCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(minScale), .5f, "Minimum scale.[0.1, 1, 0.1, 0.5]{P}");
             MelonPreferences.CreateEntry(Category, nameof(maxScale), 3f, "Maximum scale.[1, 3, 0.1, 3]{P}");
 
-            MelonPreferences.CreateEntry(Category, nameof(randomColorsTitle), "", randomColorsTitle);
+            MelonPreferences.CreateEntry(Category, nameof(randomColorsTitle), "", "[Header]Random Colors");
             MelonPreferences.CreateEntry(Category, nameof(randomColorsEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(randomColorsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(randomColorsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(colorSwapTitle), "", colorSwapTitle);
+            MelonPreferences.CreateEntry(Category, nameof(colorSwapTitle), "", "[Header]Color Swap");
             MelonPreferences.CreateEntry(Category, nameof(colorSwapEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(colorSwapDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(colorSwapCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(streamModeTitle), "", streamModeTitle);
+            MelonPreferences.CreateEntry(Category, nameof(streamModeTitle), "", "[Header]Stream Mode");
             MelonPreferences.CreateEntry(Category, nameof(streamModeEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(streamModeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(streamModeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(maxStreamSpeed), 16, "Maximum interval (note value).[4, 32, 2, 16]");
 
-            MelonPreferences.CreateEntry(Category, nameof(hiddenTelegraphsTitle), "", hiddenTelegraphsTitle);
+            MelonPreferences.CreateEntry(Category, nameof(hiddenTelegraphsTitle), "", "[Header]Hidden Telegraphs");
             MelonPreferences.CreateEntry(Category, nameof(hiddenTelegraphsEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(hiddenTelegraphsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(hiddenTelegraphsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
 
-            MelonPreferences.CreateEntry(Category, nameof(unifyColorsTitle), "", unifyColorsTitle);
+            MelonPreferences.CreateEntry(Category, nameof(unifyColorsTitle), "", "[Header]Unify Colors");
             MelonPreferences.CreateEntry(Category, nameof(unifyColorsEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(unifyColorsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(unifyColorsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 60, 1, 20]");
@@ -287,17 +287,12 @@ namespace AudicaModding
             MelonPreferences.CreateEntry(Category, nameof(nukeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(nukeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");*/
 
-            MelonPreferences.CreateEntry(Category, nameof(stutterChainTitle), "", stutterChainTitle);
+            MelonPreferences.CreateEntry(Category, nameof(stutterChainTitle), "", "[Header]Stutter Chains");
             MelonPreferences.CreateEntry(Category, nameof(stutterChainsEnabled), true, "Enables this modifier.");
             MelonPreferences.CreateEntry(Category, nameof(stutterChainsDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
             MelonPreferences.CreateEntry(Category, nameof(stutterChainsCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
             MelonPreferences.CreateEntry(Category, nameof(stutterChainsMin), .5f, "Minimum Stutter Rotation.[1, 50, 1, 1]{P}");
             MelonPreferences.CreateEntry(Category, nameof(stutterChainsMax), 3f, "Maximum Stutter Rotation.[6, 100, 1, 100]{P}");
-
-            MelonPreferences.CreateEntry(Category, nameof(bopModeTitle), "", bopModeTitle);
-            MelonPreferences.CreateEntry(Category, nameof(bopModeEnabled), true, "Enables this modifier.");
-            MelonPreferences.CreateEntry(Category, nameof(bopModeDuration), 20f, "Duration of this modifier. [10, 60, 1, 20]");
-            MelonPreferences.CreateEntry(Category, nameof(bopModeCooldown), 20f, "Cooldown before this modifier can be activated again. [0, 600, 10, 120]");
 
             OnPreferencesSaved();
         }
@@ -337,7 +332,7 @@ namespace AudicaModding
             //timingAttackParams = new ModifierParams.TimingAttack(timingAttackEnabled, timingAttackDuration, timingAttackCooldown);
             //nukeParams = new ModifierParams.Nuke(nukeEnabled, nukeDuration, nukeCooldown);
             stutterChainParams = new ModifierParams.StutterChains(stutterChainsEnabled, stutterChainsDuration, stutterChainsCooldown, stutterChainsMin, stutterChainsMax);
-            bopModeParams = new ModifierParams.BopMode(bopModeEnabled, bopModeDuration, bopModeCooldown);
+            //bopModeParams = new ModifierParams.BopMode(bopModeEnabled, bopModeDuration, bopModeCooldown);
         }
     }
 }

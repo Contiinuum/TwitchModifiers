@@ -114,8 +114,8 @@ namespace AudicaModding
                 case ModifierType.StutterChains:
                     if (Config.stutterChainParams.enabled) mod = new StutterChains(type, new ModifierParams.Default("Stutter Chains", user, color), Config.stutterChainParams, amount);
                     break;
-                case ModifierType.BopMode:
-                    if(Config.bopModeParams.enabled) mod = new BopMode(type, new ModifierParams.Default("Lightshow", user, color), Config.bopModeParams);
+                //case ModifierType.BopMode:
+                    //if(Config.bopModeParams.enabled) mod = new BopMode(type, new ModifierParams.Default("Lightshow", user, color), Config.bopModeParams);
                     break;
                 default:
                     return;
