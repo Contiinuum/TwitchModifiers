@@ -61,3 +61,12 @@ You can choose to require channel points for modifiers. you need to create a cus
  * Per default, a modifier can only be triggered once every 20 seconds
  * Per default, a modifier will last 20 seconds
  * If you have particle killer installed and enabled, the !particles command will not do anything
+
+ ## Moderator commands
+ 
+ Following commands can be used by channel moderators only:
+ 
+ Command  |  Values | Description 
+ --- | --- | --- | 
+ !twitchmodson | | Enables twitch modifiers 
+ !twitchmodsoff | | Disables twitch modifiers 

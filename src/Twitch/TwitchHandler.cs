@@ -22,6 +22,7 @@ namespace AudicaModding
             public string flags = "";
             public string id = "";
             public string mod = "";
+            public string broadcaster = "";
             public string roomId = "";
             public string tmiSentTs = "";
             public string userId = "";
@@ -99,24 +100,47 @@ namespace AudicaModding
                     parsedMsg.userId = str.Replace("user-id=", "");
                 }
             }
+            if (parsedMsg.badges.Contains("broadcaster"))
+            {
+                parsedMsg.broadcaster = "1";
+            }
             //parsedMsg.color = color;
             return parsedMsg;
         }
 
-        public static void ParseCommand(string msg, string user, string color, string customRewardId)
+        public static void ParseCommand(ParsedTwitchMessage message)
         {
-            if (!Config.generalParams.enableTwitchModifiers) return;
-            if (customRewardId.Length == 0 && Config.generalParams.useChannelPoints)
-            {
-                MelonLogger.Msg("No channel points redeemed.");
-                return;
-            }
+            string msg = message.message;
+            string user = message.displayName;
+            string color = message.color;
+            string customRewardId = message.customRewardId;
             if (msg.Substring(0, 1) == "!")
             {
                 string command = msg.Replace("!", "").Split(" ".ToCharArray())[0];
                 string arguments = msg.Replace("!" + command + " ", "");
                 if (color.Length == 0) color = "\"white\"";
                 float amount = ParseAmount(arguments) / 100;
+
+                if (!Config.generalParams.enableTwitchModifiers)
+                {
+                    if (command == "twitchmodson" && (message.mod == "1" || message.broadcaster == "1"))
+                    {
+                        Config.EnableAll(true);
+                    }
+                    return;
+                }
+                if (command == "twitchmodsoff" && (message.mod == "1" || message.broadcaster == "1"))
+                {
+                    Config.EnableAll(false);
+                    return;
+                }
+
+                if (customRewardId.Length == 0 && Config.generalParams.useChannelPoints)
+                {
+                    MelonLogger.Msg("No channel points redeemed.");
+                    return;
+                }
+
                 if (amount < 0 && command != "zoffset") return;
                 if(amount > 0 || (amount < 0 && command == "zoffset"))
                 {
@@ -218,8 +242,8 @@ namespace AudicaModding
                     {
                         //CommandManager.RegisterModifier(ModifierType.BopMode, user, color);
                     }
-            
-                }        
+
+                }
             }
         }
 

@@ -310,6 +310,12 @@ namespace AudicaModding
             AssignValues();
         }
 
+        public static void EnableAll(bool enable)
+        {
+            MelonPreferences.SetEntryValue(Category, nameof(enableTwitchModifiers), enable);
+            MelonPreferences.Save();
+        }
+
         private static void AssignValues()
         {
             generalParams = new ModifierParams.General(enableCountdown, showOnScoreOverlay, allowScoreDisablingMods , useChannelPoints, cooldownBetweenModifiers, enableTwitchModifiers, maxActiveModifiers, showModStatus, disableForOst);
