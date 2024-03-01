@@ -26,8 +26,8 @@ You can choose to require channel points for modifiers. you need to create a cus
  !mines |  | Spawns mines at random positions 
  !womble | 50-150 | Wobbles song speed depending on value 
  !wobble |  | Wobbles song speed 
- !wooble |  | More retarded wobble 
- !wrobl |  | Wobble, but full retard 
+ !wooble |  | Stupider wobble 
+ !wrobl |  | Wobble, but very cursed 
  !invisguns |  | Turns guns invisible 
  !bettermelees |  | Turns melees into.. better melees.
  !randomoffset |  | Applies a random offset to all targets 
